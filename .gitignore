@@ -7,6 +7,7 @@
 
 # dependencies
 /node_modules
+functions/node_modules/
 
 # IDEs and editors
 /.idea
@@ -42,3 +43,5 @@ testem.log
 Thumbs.db
 
 environment.*
+functions/**/*.js
+.vscode/
