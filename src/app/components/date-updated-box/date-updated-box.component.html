@@ -1,0 +1,19 @@
+<div class="panel widget">
+  <div class="row row-table">
+    <div class="col-xs-4 text-center bg-info pv-lg">
+      <!-- See formats: https://docs.angularjs.org/api/ng/filter/date-->
+      <span class="text-sm">{{ data?.dateUpdated | date:'MMMM' }}</span>
+      <br/>
+      <span class="h2 mt0">{{ data?.dateUpdated | date:'d' }}</span>
+    </div>
+    <div class="col-xs-8 pv-lg">
+      <span class="text-uppercase">{{ data?.dateUpdated | date:'EEEE' }}</span>
+      <br/>
+      <span class="h2 mt0">{{ data?.dateUpdated | date:'h:mm' }}</span>
+      <span class="text-muted text-sm">{{ data?.dateUpdated | date:'a' }}</span>
+    </div>
+  </div>
+  <div class="panel-footer bg-gray-dark bt0 clearfix btn-block text-center">
+    <span class="text-center">Last Updated</span>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="panel panel-default recent-activity">
+  <div class="panel-body bb bt">
+    <p class="activity-header">
+      <i class="fa fa-minus-circle" aria-hidden="true" (click)="hideActivity()" *ngIf="fb.hideRecentActivity == false"></i>
+      <i class="fa fa-plus-circle" aria-hidden="true" (click)="hideActivity()" *ngIf="fb.hideRecentActivity == true"></i>
+      Recent Activity
+    </p>
+  </div>
+  <div *ngIf="activityItems != undefined; else loading"></div>
+  <div class="panel-body" *ngIf="fb.hideRecentActivity == false && activityItems?.length > 0">
+    <ul class="timeline-alt">
+
+      <li *ngFor="let item of activityItems">
+        <div class="timeline-panel">
+          <div class="popover right">
+            <h4 class="popover-title">{{ fb.activityTypesIndex[item?.type] }}<p class="float-right text-muted text-normal">{{ fb.userIndex[item?.postedBy]?.name }}</p></h4>
+            <div class="arrow"></div>
+            <div class="popover-content" *ngIf="item?.isTodo == true">
+              <p class="title"><em class="{{item?.class}}"></em> <b>{{ fb?.userIndex[item.personId]?.name }}</b> completed a todo about
+                <a class="info-link" *ngIf="item?.postedToType == 'Person'" [routerLink]="item.postedToLink">{{ fb?.peopleNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Company'" [routerLink]="item.postedToLink">{{ fb?.companiesNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Parent Company'" [routerLink]="item.postedToLink">{{ fb?.parentCompaniesNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Location'" [routerLink]="item.postedToLink">{{ fb?.locationsNameIndex[item?.postedTo]?.name }}</a>
+              </p>
+              <p><b></b></p>
+              <p>{{ item?.title }}</p>
+              <p class="text-show-format">{{ item?.note }}</p>
+              <small class="text-muted date">{{ item?.date | date:'medium' }}</small>
+            </div>
+
+            <div class="popover-content" *ngIf="item?.isTodo == false">
+              <p class="title" *ngIf="item.personId"><em class="{{item?.class}}"></em> Activity about
+                <a [routerLink]="'/people/'+item?.personId">{{ fb?.peopleNameIndex[item.personId]?.name }}</a> at
+                <a class="info-link" *ngIf="item?.postedToType == 'Person'" [routerLink]="item.postedToLink">{{ fb?.peopleNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Company'" [routerLink]="item.postedToLink">{{ fb?.companiesNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Parent Company'" [routerLink]="item.postedToLink">{{ fb?.parentCompaniesNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Location'" [routerLink]="item.postedToLink">{{ fb?.locationsNameIndex[item?.postedTo]?.name }}</a>
+              </p>
+              <p class="title" *ngIf="!item.personId"><em class="{{item?.class}}"></em> Activity about
+                <a class="info-link" *ngIf="item?.postedToType == 'Person'" [routerLink]="item.postedToLink">{{ fb?.peopleNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Company'" [routerLink]="item.postedToLink">{{ fb?.companiesNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Parent Company'" [routerLink]="item.postedToLink">{{ fb?.parentCompaniesNameIndex[item?.postedTo]?.name }}</a>
+                <a class="info-link" *ngIf="item?.postedToType == 'Location'" [routerLink]="item.postedToLink">{{ fb?.locationsNameIndex[item?.postedTo]?.name }}</a>
+              </p>
+              <p class="text-show-format">{{ item?.note }}</p>
+
+              <small class="text-muted date">{{ item?.date | date:'medium' }}</small>
+            </div>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</div>
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

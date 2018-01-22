@@ -1,0 +1,49 @@
+<div class="row bg-white">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Campaign</th>
+        <th>Sent By</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let view of recentEmailViews">
+        <td>
+                <span *ngIf="view.receiverType == 'people'">
+             <em class="icon-people"></em>&nbsp;&nbsp;&nbsp;
+             <a class="item-display" [routerLink]="['/people/'+view.receiverKey]">{{ fb.peopleNameIndex[view?.receiverKey]?.name }}</a>
+           </span>
+          <span *ngIf="view.receiverType == 'locations'">
+            <em class="icon-layers"></em>&nbsp;&nbsp;&nbsp;
+            <a class="item-display" [routerLink]="['/locations/'+view.receiverKey ]">{{ fb.locationsNameIndex[view?.receiverKey]?.name }}</a>
+          </span>
+          <span *ngIf="view.receiverType == 'companies'">
+            <em class="icon-briefcase"></em>&nbsp;&nbsp;&nbsp;
+            <a class="item-display" [routerLink]="['/companies/'+view.receiverKey]">{{ fb.companiesNameIndex[view?.receiverKey]?.name }}</a>
+          </span>
+          <span *ngIf="view.receiverType == 'parent_companies'">
+            <em class="icon-diamond"></em>&nbsp;&nbsp;
+            &nbsp;<a class="item-display" [routerLink]="['/parent-companies/'+view.receiverKey ]">{{ fb.parentCompaniesNameIndex[view?.receiverKey]?.name }}</a>
+          </span>
+        </td>
+        <td>
+          {{ view.viewed_on | date:'medium' }}
+        </td>
+        <td>
+          <span *ngIf="view.emailCampaignKey != 'solo_email'">
+            <a class="item-display" [routerLink]="['/email-campaigns/'+view.emailCampaignKey ]"><em class="icon-folder-alt"></em></a>
+            {{ fb?.emailCampaignIndex[view.emailCampaignKey]?.name }}
+          </span>
+          <span *ngIf="view.emailCampaignKey == 'solo_email'">Solo Email</span>
+        </td>
+        <td>
+          {{ fb.userIndex[view.sentBy]?.name }}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+@import "../../shared/styles/app.scss";
+
+h2 {
+  -webkit-margin-before: 0.3em;
+  -webkit-margin-after: 0.3em;
+}
+
+.wrapper {
+  margin-top: 40px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: $primary-hex;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+
+.form-signin-heading,
+.checkbox {
+  margin-bottom: 30px;
+  color: #fff;
+}
+
+.checkbox {
+  font-weight: normal;
+}
+
+.form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+}
+
+.full-width {
+  width: 100%;
+}
+.logo {
+  max-width: 175px;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  margin-top: 60px;
+}

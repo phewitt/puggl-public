@@ -1,0 +1,86 @@
+<div class="content-heading">
+  {{ (company | async)?.name}}
+  <mat-chip-list class="account-exec" >
+    <mat-chip color="primary" selected="true"><i class="fa fa-archive" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;{{ fb?.userIndex[(company | async)?.accountExecutiveKey]?.name }}</mat-chip>
+    <mat-chip color="warn" *ngIf="(company | async)?.isDoNotContact" selected="true">Do Not Contact</mat-chip>
+    <mat-chip [ngStyle]="{'background': '#4CAF50'}" *ngIf="(company | async)?.isCustomer" selected="true"><em class="icon-badge"></em>&nbsp;&nbsp;Customer</mat-chip>
+  </mat-chip-list>
+  <button class="mb-sm btn btn-info float-right" type="button" (click)="editCompany()">Edit</button>
+  <button class="mb-sm btn btn-danger float-right sm-margin-right" type="button" (click)="delete()"><i class="fa fa-times"></i></button>
+  <small><em class="icon-briefcase"></em>&nbsp;&nbsp;Company</small>
+</div>
+<!-- START widgets box-->
+<div class="row">
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <date-updated-box [data]="company | async"></date-updated-box>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <date-added-box [data]="company | async"></date-added-box>
+  </div>
+  <div class="col-lg-3 col-sm-6">
+    <!-- START widget-->
+    <div class="panel widget bg-purple">
+      <div class="row row-table">
+        <div class="col-xs-4 text-center bg-purple-dark pv-lg">
+          <em class="icon-globe fa-3x"></em>
+        </div>
+        <div class="col-xs-8 pv-lg">
+          <div class="h2 mt0">700
+            <small>GB</small>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer bg-gray-dark bt0 clearfix btn-block text-center">
+        <span class="text-center">Number of Locations</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-6 col-sm-12">
+    <!-- START widget-->
+    <div class="panel widget bg-green">
+      <div class="row row-table">
+        <div class="col-xs-4 text-center bg-green-dark pv-lg">
+          <em class="icon-bubbles fa-3x"></em>
+        </div>
+        <div class="col-xs-8 pv-lg">
+          <div class="h2 mt0">500</div>
+        </div>
+      </div>
+      <div class="panel-footer bg-gray-dark bt0 clearfix btn-block text-center">
+        <span class="text-center">Number of People</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+
+  <div class="col-lg-8">
+    <div class="panel">
+      <tabset class="bg-white p0" [justified]="true">
+        <tab>
+          <tab-people [data]="(company | async)" [id]="companyKey" [type]="'companies'"></tab-people>
+        </tab>
+        <tab>
+          <tab-locations [data]="(company | async)" [id]="companyKey" [type]="'companies'"></tab-locations>
+        </tab>
+        <tab>
+          <tab-parent-company [data]="(company | async)" [id]="companyKey" [type]="'companies'"></tab-parent-company>
+        </tab>
+      </tabset>
+    </div>
+
+    <deals [data]="(company | async)" [id]="companyKey" [type]="'companies'"></deals>
+
+    <activity-feed [data]="(company | async)" [id]="companyKey" [type]="'companies'"></activity-feed>
+  </div>
+
+  <div class="col-lg-4">
+    <info-panel [title]="'Company Information'" [data]="company | async"></info-panel>
+    <to-do-list [id]="companyKey" [type]="'companies'" [data]="(company | async)"></to-do-list>
+    <email-tracker-stats-box  [id]="companyKey" [type]="'companies'" [data]="(company | async)"></email-tracker-stats-box>
+  </div>
+</div>
+
+

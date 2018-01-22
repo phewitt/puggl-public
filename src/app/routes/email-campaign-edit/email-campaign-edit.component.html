@@ -1,0 +1,124 @@
+<div class="content-heading">
+  <mat-chip-list>
+    Email Campaign &nbsp;&nbsp;&nbsp;
+    <mat-chip color="primary" *ngIf="!emailCampaign?.hasBeenSent" selected="true">Not Sent</mat-chip>
+    <mat-chip color="accent" *ngIf="emailCampaign?.hasBeenSent" selected="true">Sent</mat-chip>
+  </mat-chip-list>
+
+  <small><em class="icon-menu"></em>&nbsp;&nbsp;</small>
+  <button class="btn btn-primary float-right send-button" *ngIf="!emailCampaign?.hasBeenSent" type="submit" [disabled]="!canSendEmails()" (click)="alertSendEmails()">Send Emails</button>
+  <button class="btn btn-primary float-right send-button" *ngIf="emailCampaign?.hasBeenSent" type="submit" [routerLink]="['/email-campaigns/' + emailCampaignKey + '/stats']">View Stats</button>
+
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
+    <!-- START panel-->
+    <div class="panel panel-default">
+      <div class="panel-heading">Campaign Data</div>
+      <div class="panel-body">
+
+        <form role="form">
+          <div class="form-group">
+            <label>Name*</label>
+            <input class="form-control" [(ngModel)]="emailCampaign.name" [disabled]="emailCampaign?.hasBeenSent" type="text" name="name" placeholder="Campaign Name" />
+          </div>
+          <div class="form-group">
+            <label>Subject*</label>
+            <input class="form-control" [(ngModel)]="emailCampaign.subject" [disabled]="emailCampaign?.hasBeenSent" name="subject" type="text" placeholder="Email Subject" />
+          </div>
+          <div class="form-group">
+            <mat-slide-toggle [(ngModel)]="emailCampaign.showUserSignature" name="showUserSignature">Include your Email Signature</mat-slide-toggle>
+          </div>
+          <div class="form-group">
+            <p>Email List*</p>
+            <select class="form-control" name="emailListKey" [(ngModel)]="emailCampaign.emailListKey" (change)="setEmailList()" [disabled]="emailCampaign?.hasBeenSent">
+              <option *ngFor="let source of emailLists | async" value="{{source.id}}">{{source.name}} -- {{source.items.length}} People</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <p>Email Template*</p>
+            <select class="form-control" name="emailTemplateKey" [disabled]="emailCampaign?.hasBeenSent" (change)="setEmailTemplate()" [(ngModel)]="emailCampaign.emailTemplateKey">
+              <option *ngFor="let source of emailTemplates | async" value="{{source.id}}">{{source.title}}</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" *ngIf="!emailCampaign?.hasBeenSent" type="submit" (click)="updateEmailCampaign()">Update</button>
+        </form>
+      </div>
+    </div>
+    <!-- END panel-->
+
+    <div class="panel margin-top">
+      <div class="panel-body">
+        <label>Items</label>
+        <p-dataTable *ngIf="emailCampaign?.hasBeenSent" [value]="(emailList | async)" >
+          <p-column field="receiverType" header="" styleClass="col-icon">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngIf="car[col.field] == 'people'"><em class="icon-people"></em></div>
+              <div *ngIf="car[col.field] == 'locations'"><em class="icon-layers"></em></div>
+              <div *ngIf="car[col.field] == 'companies'"><em class="icon-briefcase"></em></div>
+              <div *ngIf="car[col.field] == 'parent_companies'"><em class="icon-diamond"></em></div>
+            </ng-template>
+          </p-column>
+          <p-column field="receiverName" header="Name">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div>{{ car[col.field] }}</div>
+            </ng-template>
+          </p-column>
+          <p-column field="to" header="Email">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div>{{ car[col.field] }}</div>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+
+
+
+        <p-dataTable *ngIf="!emailCampaign?.hasBeenSent" [value]="(emailList | async)?.items" [immutable]="false">
+          <p-column field="type" header="" styleClass="col-icon">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngIf="car[col.field] == 'people'"><em class="icon-people"></em></div>
+              <div *ngIf="car[col.field] == 'locations'"><em class="icon-layers"></em></div>
+              <div *ngIf="car[col.field] == 'companies'"><em class="icon-briefcase"></em></div>
+              <div *ngIf="car[col.field] == 'parent_companies'"><em class="icon-diamond"></em></div>
+            </ng-template>
+          </p-column>
+          <p-column field="type" header="Name">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngIf="car[col.field] == 'people'">{{ fb.peopleNameIndex[car['key']]?.name }}</div>
+              <div *ngIf="car[col.field] == 'locations'">{{ fb.locationsNameIndex[car['key']]?.name }}</div>
+              <div *ngIf="car[col.field] == 'companies'">{{ fb.companiesNameIndex[car['key']]?.name }}</div>
+              <div *ngIf="car[col.field] == 'parent_companies'">{{ fb.parentCompaniesNameIndex[car['key']]?.name }}</div>
+            </ng-template>
+          </p-column>
+          <p-column field="type" header="Email">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngIf="car[col.field] == 'people'">{{ fb.peopleNameIndex[car['key']]?.email }}</div>
+              <div *ngIf="car[col.field] == 'locations'">{{ fb.locationsNameIndex[car['key']]?.email }}</div>
+              <div *ngIf="car[col.field] == 'companies'">{{ fb.companiesNameIndex[car['key']]?.email }}</div>
+              <div *ngIf="car[col.field] == 'parent_companies'">{{ fb.parentCompaniesNameIndex[car['key']]?.email }}</div>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-sm-6">
+    <div class="panel" *ngIf="emailCampaign.emailTemplateKey">
+      <div class="panel-body" *ngIf="emailTemplate">
+        <div *ngIf="!emailCampaign?.hasBeenSent" [innerHTML]="(emailTemplate | async)?.email | keepHtml"></div>
+        <div *ngIf="emailCampaign?.hasBeenSent" [innerHTML]="emailCampaign.emailSent | keepHtml"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog header="Sending Emails"
+          [(visible)]="showProgressBar"
+          [height]="'120'"
+          [closable]="false"
+          [width]="'500'">
+  <p-progressBar [value]="value | number:'1.0-0'"></p-progressBar>
+</p-dialog>

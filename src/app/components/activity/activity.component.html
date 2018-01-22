@@ -1,0 +1,94 @@
+<div class="panel panel-default">
+  <div class="panel-body bb bt">
+    <p class="activity-header">
+      <i class="fa fa-minus-circle" aria-hidden="true" (click)="hideActivity()" *ngIf="fb.hideActivity == false"></i>
+      <i class="fa fa-plus-circle" aria-hidden="true" (click)="hideActivity()" *ngIf="fb.hideActivity == true"></i>
+      Activity ({{ activityItems?.length ? activityItems?.length : 0  }})
+      <button class="btn btn-primary float-right" type="button" (click)="showNewActivity()">New Activity</button>
+    </p>
+  </div>
+
+  <div class="panel-body bb bt" *ngIf="showActivity">
+    <div *ngIf="fb.error" class="error" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      {{fb.error }}
+    </div>
+
+    <form>
+      <textarea name="activityText" [rows]="7" [(ngModel)]="activity.note" class="full-width" pInputTextarea></textarea>
+
+      <div class="dropdown-wrapper">
+        <div class="quarter-width">
+          <p>Activity Type*</p>
+          <select class="form-control" name="activityType" [(ngModel)]="activity.type">
+            <option *ngFor="let source of activityTypes | async" value="{{source.id}}">{{source.name}}</option>
+          </select>
+        </div>
+        &nbsp;&nbsp;&nbsp;
+        <div class="quarter-width" *ngIf="this.type != 'people'">
+          <p>Person</p>
+          <select class="form-control" name="activityType" [(ngModel)]="activity.person">
+            <option value=""></option>
+            <option *ngFor="let key of data?.peopleKeys" value="{{key}}">{{ fb?.peopleNameIndex[key]?.name }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="dropdown-wrapper">
+        <div class="quarter-width p">
+          <p>Date</p>
+          <input class="form-control" bsDatepicker #dp="bsDatepicker" [bsConfig]="bsConfig" name="dueDate" [(ngModel)]="activity.date" />
+        </div>
+        <div class="quarter-width">
+          <timepicker [(ngModel)]="activity.date" name="dueDateTime"></timepicker>
+        </div>
+      </div>
+      <br>
+      <button class="btn btn-info float-left" type="submit" (click)="saveActivity()">Save Activity</button>
+    </form>
+  </div>
+
+  <div *ngIf="activityItems != undefined; else loading"></div>
+  <div class="panel-body" *ngIf="fb.hideActivity == false && activityItems?.length > 0">
+    <ul class="timeline-alt">
+
+      <li *ngFor="let item of activityItems">
+        <div class="timeline-badge primary">
+          <em class="fa fa-sticky-note"></em>
+        </div>
+        <div class="timeline-panel">
+          <div class="popover right">
+            <span><h4 class="popover-title">{{ fb?.activityTypesIndex[item?.type] }}<p class="float-right text-muted text-normal">{{ fb?.userIndex[item?.postedBy]?.name }}</p></h4></span>
+            <div class="arrow"></div>
+            <div class="popover-content" *ngIf="item?.isTodo == true">
+              <p class="title"><em class="{{item?.class}}"></em> <b>{{ fb?.userIndex[item.personId]?.name }}</b> completed a todo about
+                <a class="info-link" [routerLink]="item.postedToLink">{{ item?.postedTo }}</a>
+              </p>
+              <p><b></b></p>
+              <p>{{ item?.title }}</p>
+              <p class="text-show-format">{{ item?.note }}</p>
+
+              <small class="text-muted date">{{ item?.date | date:'medium' }}</small>
+            </div>
+
+            <div class="popover-content" *ngIf="item?.isTodo == false">
+              <p class="title" *ngIf="item.personId"><em class="{{item?.class}}"></em> Activity about <a [routerLink]="'/people/'+item?.personId">{{ fb?.peopleNameIndex[item?.personId]?.name }}</a> at
+                <a class="info-link" [routerLink]="item.postedToLink">{{ item?.postedTo }}</a>
+              </p>
+              <p class="title" *ngIf="!item.personId"><em class="{{item?.class}}"></em> Activity about
+                <a class="info-link" [routerLink]="item.postedToLink">{{ item?.postedTo }}</a>
+              </p>
+              <p class="text-show-format">{{ item?.note }}</p>
+
+              <small class="text-muted date">{{ item?.date | date:'medium' }}</small>
+            </div>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+  </div>
+</div>
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

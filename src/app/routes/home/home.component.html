@@ -1,0 +1,117 @@
+    <div class="row">
+      <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <em class="fa fa-comments fa-5x"></em>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="text-lg">{{ stats?.contactsAdded }}</div>
+                <p class="m0">Contacts Added this Week!</p>
+              </div>
+            </div>
+          </div>
+          <!--<a class="panel-footer bg-gray-dark bt0 clearfix btn-block" href="#">-->
+            <!--<span class="pull-left">View Details</span>-->
+            <!--<span class="pull-right">-->
+               <!--<em class="fa fa-chevron-circle-right"></em>-->
+            <!--</span>-->
+          <!--</a>-->
+          <!-- END panel-->
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-green">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <em class="fa fa-tasks fa-5x"></em>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="text-lg">{{ stats?.todosAdded }}</div>
+                <p class="m0">Todos Added this week!</p>
+              </div>
+            </div>
+          </div>
+          <!--<a class="panel-footer bg-gray-dark bt0 clearfix btn-block" href="#">-->
+            <!--<span class="pull-left">View Details</span>-->
+            <!--<span class="pull-right">-->
+               <!--<em class="fa fa-chevron-circle-right"></em>-->
+            <!--</span>-->
+          <!--</a>-->
+        </div>
+        <!-- END panel-->
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <em class="fa fa-envelope-o fa-5x"></em>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="text-lg">{{ stats?.emailsSent }}</div>
+                <p class="m0">Emails Sent this Week!</p>
+              </div>
+            </div>
+          </div>
+          <!--<a class="panel-footer bg-gray-dark bt0 clearfix btn-block" href="#">-->
+            <!--<span class="pull-left">View Details</span>-->
+            <!--<span class="pull-right">-->
+               <!--<em class="fa fa-chevron-circle-right"></em>-->
+            <!--</span>-->
+          <!--</a>-->
+        </div>
+        <!-- END panel-->
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <!-- START panel-->
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <em class="fa fa-eye fa-5x"></em>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="text-lg">{{ stats?.emailViews }}</div>
+                <p class="m0">Total email views this week!</p>
+              </div>
+            </div>
+          </div>
+          <!--<a class="panel-footer bg-gray-dark bt0 clearfix btn-block" href="#">-->
+            <!--<span class="pull-left">View Details</span>-->
+            <!--<span class="pull-right">-->
+               <!--<em class="fa fa-chevron-circle-right"></em>-->
+            <!--</span>-->
+          <!--</a>-->
+        </div>
+        <!-- END panel-->
+      </div>
+    </div>
+
+
+  <div class="row">
+    <div class="col-md-8">
+      <info-block-todos></info-block-todos>
+
+      <tabset [justified]="true">
+        <tab heading="Recent Deals">
+          <info-box-deals></info-box-deals>
+        </tab>
+        <tab heading="Recent Email Views">
+          <info-box-recent-email-views></info-box-recent-email-views>
+        </tab>
+        <tab heading="My Accounts">
+          <info-box-account-executive></info-box-account-executive>
+        </tab>
+        <!--<tab heading="Long Justified">Long Labeled Justified content</tab>-->
+      </tabset>
+    </div>
+    <div class="col-md-4">
+      <info-block-recent-activity></info-block-recent-activity>
+    </div>
+  </div>

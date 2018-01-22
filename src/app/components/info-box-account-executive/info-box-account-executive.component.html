@@ -1,0 +1,49 @@
+<div class="row bg-white">
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Last Activity</th>
+        <th>Address</th>
+        <th>Email</th>
+        <th>Phone</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let view of accounts">
+        <td>
+                <span *ngIf="view.type == 'people'">
+             <em class="icon-people"></em>&nbsp;&nbsp;&nbsp;
+             <a class="item-display" [routerLink]="['/people/'+view.id]">{{ view?.firstName }} {{ view?.lastName }}</a>
+           </span>
+          <span *ngIf="view.type == 'locations'">
+            <em class="icon-layers"></em>&nbsp;&nbsp;&nbsp;
+            <a class="item-display" [routerLink]="['/locations/'+view.id ]">{{ view?.name }}</a>
+          </span>
+          <span *ngIf="view.type == 'companies'">
+            <em class="icon-briefcase"></em>&nbsp;&nbsp;&nbsp;
+            <a class="item-display" [routerLink]="['/companies/'+view.id]">{{ view?.name }}</a>
+          </span>
+          <span *ngIf="view.type == 'parent_companies'">
+            <em class="icon-diamond"></em>&nbsp;&nbsp;
+            &nbsp;<a class="item-display" [routerLink]="['/parent-companies/'+view.id ]">{{  view?.name }}</a>
+          </span>
+        </td>
+        <td>
+          {{ view.dateUpdated | date:'medium' }}
+        </td>
+        <td>
+          <span>{{ view?.address?.city }} {{ view?.address?.state }}</span>
+        </td>
+        <td>
+          {{ view?.email }}
+        </td>
+        <td>
+          {{ view?.phone }}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

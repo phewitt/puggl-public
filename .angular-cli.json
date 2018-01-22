@@ -1,0 +1,128 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "project": {
+    "name": "ng2angle"
+  },
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "dist/browser",
+      "assets": [
+        "assets",
+        "favicon.ico",
+        "firebase-messaging-sw.js",
+        "manifest.json"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "app/core/preloader/preloader.scss",
+        "styles.scss",
+        "../node_modules/primeng/resources/themes/omega/theme.css",
+        "../node_modules/primeng/resources/primeng.min.css",
+        "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+        "../node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+        "../node_modules/froala-editor/css/froala_style.min.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css"
+      ],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "app/core/preloader/preloader.js",
+        "../node_modules/froala-editor/js/froala_editor.pkgd.min.js",
+        "../node_modules/moment/min/moment-with-locales.min.js",
+        "../node_modules/localforage/dist/localforage.js",
+        "../node_modules/fullcalendar/dist/fullcalendar.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    },
+    {
+      "platform": "server",
+      "root": "src",
+      "outDir": "dist/server",
+      "assets": [
+        "assets",
+        "favicon.ico",
+        "firebase-messaging-sw.js",
+        "manifest.json"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.server.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "app/core/preloader/preloader.scss",
+        "styles.scss",
+        "../node_modules/primeng/resources/themes/omega/theme.css",
+        "../node_modules/primeng/resources/primeng.min.css",
+        "../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+        "../node_modules/froala-editor/css/froala_editor.pkgd.min.css",
+        "../node_modules/froala-editor/css/froala_style.min.css",
+        "../node_modules/font-awesome/css/font-awesome.min.css"
+      ],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "app/core/preloader/preloader.js",
+        "../node_modules/froala-editor/js/froala_editor.pkgd.min.js",
+        "../node_modules/moment/min/moment-with-locales.min.js",
+        "../node_modules/localforage/dist/localforage.js",
+        "../node_modules/fullcalendar/dist/fullcalendar.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "lint": [
+    {
+      "project": "src/tsconfig.app.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "src/tsconfig.spec.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "e2e/tsconfig.e2e.json",
+      "exclude": "**/node_modules/**"
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "scss",
+    "prefixInterfaces": false,
+    "inline": {
+      "style": false,
+      "template": false
+    },
+    "spec": {
+      "class": false,
+      "component": true,
+      "directive": true,
+      "module": false,
+      "pipe": true,
+      "service": true
+    }
+  }
+}

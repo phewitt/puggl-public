@@ -1,0 +1,28 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <img class="logo" src="https://firebasestorage.googleapis.com/v0/b/storpug-main.appspot.com/o/pug%20body.png?alt=media&token=d5a42474-c6c3-43ad-a36d-b7eebd2a7250" alt="">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="wrapper">
+        <div *ngIf="error" class="error" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          {{error }}
+        </div>
+        <form class="form-signin" (submit)="loginUser($event)">
+          <h2 class="form-signin-heading text-center">Login</h2>
+          <input class="full-width form-control" [(ngModel)]="email" type="email" name="username" placeholder="Email Address" required>
+          <br>
+          <input class="full-width form-control" [(ngModel)]="password" type="password" name="password" placeholder="Password" required>
+          <br>
+          <br>
+          <button class="btn btn-primary btn-lg full-width" type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

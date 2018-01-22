@@ -1,0 +1,112 @@
+<div class="panel panel-default">
+  <div class="panel-body bb bt">
+    <p class="lead ">
+      <em class="icon-wallet icon"></em> Deals
+      <!--<i class="fa fa-refresh" aria-hidden="true"></i>-->
+      <button class="btn btn-primary float-right" type="button" (click)="newDeal()">Add Deal</button>
+    </p>
+    <span class="bb"></span>
+  </div>
+
+  <div *ngIf="deals != undefined; else loading">
+    <p-dataTable *ngIf="deals.length > 0"
+                 [value]="deals"
+                 expandableRows="true"
+                 [rows]="10"
+                 [responsive]="true"
+                 [paginator]="true"
+                 #dt>
+      <p-column field="probability" header="Status" styleClass="col-button" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <mat-chip-list>
+            <mat-chip *ngIf="car['status'] == 'green'" [ngStyle]="{'background': '#4CAF50'}" selected="true">{{ car[col.field] }}%</mat-chip>
+            <mat-chip *ngIf="car['status'] == 'yellow'" [ngStyle]="{'background': '#FFEB3B'}" selected="true">{{ car[col.field] }}%</mat-chip>
+            <mat-chip *ngIf="car['status'] == 'red'" [ngStyle]="{'background': '#EF5350'}" selected="true">{{ car[col.field] }}%</mat-chip>
+          </mat-chip-list>
+        </ng-template>
+      </p-column>
+      <p-column field="stageKey" header="Stage" [filter]="true" filterMatchMode="in">
+        <ng-template pTemplate="filter" let-col>
+          <p-multiSelect [options]="fb.dealStagesArray" defaultLabel="All Stages" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+        </ng-template>
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <span class="text-info"><b>{{ fb.dealStagesIndex[car[col.field]] }}</b></span>
+        </ng-template>
+      </p-column>
+      <p-column field="name" header="Name" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div>{{ car[col.field] }}</div>
+        </ng-template>
+      </p-column>
+      <p-column field="onboardingAmount" header="Onboarding" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div>{{ car[col.field] | currency:'USD':'symbol':'.2-2'}}</div>
+        </ng-template>
+      </p-column>
+      <p-column field="monthlyAmount" header="Monthly" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div>{{ car[col.field] | currency:'USD':'symbol':'.2-2' }}</div>
+        </ng-template>
+      </p-column>
+      <p-column field="ownerKey" header="Owner" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div>{{ fb.userIndex[car[col.field]]?.name }}</div>
+        </ng-template>
+      </p-column>
+      <p-column field="expectedClose" header="Expected Close" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div>{{ car[col.field] | date }}</div>
+        </ng-template>
+      </p-column>
+      <p-column field="dateAdded" header="Date Added" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div>{{ car[col.field] | date }}</div>
+        </ng-template>
+      </p-column>
+      <p-column field="id" header="" styleClass="col-button" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <button class="btn btn-info float-right" type="button" (click)="editDeal(car)">Edit</button>
+        </ng-template>
+      </p-column>
+    </p-dataTable>
+
+  </div>
+
+</div>
+
+
+<div bsModal #lgModal="bs-modal" class="modal fade" [config]="{ignoreBackdropClick: true}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="lgModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Deal</h4>
+      </div>
+      <div class="modal-body">
+        <div class="pr-lg">
+          <form class="mb-xl">
+            <div class="form-group">
+              <p>Name *</p>
+              <input class="form-control full-width" ng-trim="true" type="text" name="todoTitle" [(ngModel)]="deal.name" placeholder="Task title.." required="required" />
+            </div>
+
+            <div class="form-group">
+              <p>Stage</p>
+              <select class="form-control" name="activityType" [(ngModel)]="deal.stageKey">
+                <option value=""></option>
+                <option *ngFor="let source of fb.dealStagesArray" value="{{source.id}}">{{source.name}}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

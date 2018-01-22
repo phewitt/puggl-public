@@ -1,0 +1,150 @@
+<button class="sm-margin-left mb-sm btn btn-default float-left" type="button" (click)="close()">Cancel</button>
+
+<h3 class="text-center text-thin"><em class="icon-people icon"></em>&nbsp;&nbsp;Person</h3>
+<form>
+  <div class="p">
+    <h4 class="text-muted text-thin">Info</h4>
+    <div class="side-by-side">
+      <div class="half-width">
+        <p>First Name *</p>
+        <input class="form-control" type="text" [(ngModel)]="fb.sidebarData.firstName" pInputText name="firstName" required>
+      </div>
+      <div class="half-width">
+        <p>Last Name *</p>
+        <input class="form-control" type="text" [(ngModel)]="fb.sidebarData.lastName" pInputText name="lastName" required>
+      </div>
+    </div>
+
+    <div class="side-by-side">
+      <div class="half-width">
+        <p>Source</p>
+        <select class="form-control" name="source" [(ngModel)]="fb.sidebarData.source">
+          <option value=""></option>
+          <option *ngFor="let source of fb.sources" value="{{source.id}}">{{source.name}}</option>
+        </select>
+      </div>
+      <div class="half-width">
+        <p>Title</p>
+        <input class="form-control" type="text" [(ngModel)]="fb.sidebarData.title" pInputText name="title">
+      </div>
+    </div>
+
+
+    <div class="side-by-side">
+      <div class="half-width">
+        <p>Phone</p>
+        <p-inputMask class="full-width" [(ngModel)]="fb.sidebarData.phone" mask="(999) 999-9999?" name="phone"></p-inputMask>
+      </div>
+      <div class="half-width">
+        <p>Work Phone</p>
+        <p-inputMask class="full-width" [(ngModel)]="fb.sidebarData.workPhone" mask="(999) 999-9999?" name="fax" ></p-inputMask>
+      </div>
+    </div>
+
+    <p>Email</p>
+    <input class="form-control" type="text" [(ngModel)]="fb.sidebarData.email" pInputText name="email">
+
+    <br>
+    <div class="side-by-side">
+      <div class="half-width">
+        <mat-slide-toggle [(ngModel)]="fb.sidebarData.isDoNotEmail" name="isDoNotEmail">Do Not Email</mat-slide-toggle>
+      </div>
+      <div class="half-width">
+        <mat-slide-toggle [(ngModel)]="fb.sidebarData.isDoNotContact" name="isDoNotContact">Do Not Contact</mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+
+  <div class="p">
+    <h4 class="text-muted text-thin">Lead Status</h4>
+    <div class="btn-group">
+      <label class="btn btn-default" name="radioModel" [(ngModel)]="fb.sidebarData.leadStatus" [class.lead-hot]="fb.sidebarData.leadStatus == 'hot'" btnRadio="hot" uncheckable><em class="icon-fire"></em>&nbsp;&nbsp;Hot</label>
+      <label class="btn btn-default" name="radioModel" [(ngModel)]="fb.sidebarData.leadStatus" [class.lead-warm]="fb.sidebarData.leadStatus == 'warm'" btnRadio="warm" uncheckable><em class="icon-cup"></em>&nbsp;&nbsp;Warm</label>
+      <label class="btn btn-default" name="radioModel" [(ngModel)]="fb.sidebarData.leadStatus" [class.lead-cold]="fb.sidebarData.leadStatus == 'cold'" btnRadio="cold" uncheckable><em class="icon-direction"></em>&nbsp;&nbsp;Cold</label>
+    </div>
+  </div>
+
+  <div class="p">
+    <h4 class="text-muted text-thin">Relations</h4>
+    <span *ngIf="fb.sidebarData.locationKeys?.length > 0">
+      <p class="text-primary">Locations</p>
+      <span *ngFor="let index of fb.sidebarData.locationKeys">
+        <p>{{fb.locationsNameIndex[index]?.name}}</p>
+      </span>
+    </span>
+    <span *ngIf="fb.sidebarData.companyKeys?.length > 0">
+      <p class="text-primary">Companies</p>
+      <span *ngFor="let index of fb.sidebarData.companyKeys">
+        <p>{{fb.companiesNameIndex[index]?.name}}</p>
+      </span>
+    </span>
+    <span *ngIf="fb.sidebarData.parentCompanyKeys?.length > 0">
+      <p class="text-primary">Parent Companies</p>
+      <span *ngFor="let index of fb.sidebarData.parentCompanyKeys">
+        <p>{{fb.parentCompaniesNameIndex[index]?.name}}</p>
+      </span>
+    </span>
+  </div>
+    <!--<p-multiSelect-->
+      <!--[options]="locations"-->
+      <!--[styleClass]="'full-width'"-->
+      <!--[(ngModel)]="fb.sidebarData.locationKeys"-->
+      <!--[showToggleAll]="false"-->
+      <!--[maxSelectedLabels]="99"-->
+      <!--name="locations"-->
+      <!--[filter]="true"></p-multiSelect>-->
+
+    <!--<p>Companies</p>-->
+    <!--<p-multiSelect-->
+      <!--[options]="companies"-->
+      <!--[styleClass]="'full-width'"-->
+      <!--[(ngModel)]="fb.sidebarData.companyKeys"-->
+      <!--[showToggleAll]="false"-->
+      <!--[maxSelectedLabels]="99"-->
+      <!--name="companies"-->
+      <!--[filter]="true"></p-multiSelect>-->
+
+    <!--<p>Parent Companies</p>-->
+    <!--<p-multiSelect-->
+      <!--[options]="parentCompanies"-->
+      <!--[styleClass]="'full-width'"-->
+      <!--[(ngModel)]="fb.sidebarData.parentCompanyKeys"-->
+      <!--[showToggleAll]="false"-->
+      <!--[maxSelectedLabels]="99"-->
+      <!--name="people"-->
+      <!--[filter]="true"></p-multiSelect>-->
+  <!--</div>-->
+
+  <sidebar-address></sidebar-address>
+
+  <div class="p">
+    <h4 class="text-muted text-thin">Extra</h4>
+    <div class="side-by-side">
+      <div class="half-width">
+        <p>Account Executive</p>
+        <select class="form-control" name="accountExecutiveKey" [(ngModel)]="fb.sidebarData.accountExecutiveKey">
+          <option value=""></option>
+          <option *ngFor="let source of fb.userArray" value="{{source.id}}">{{source.name}}</option>
+        </select>
+      </div>
+      <div class="half-width">
+        <p>2nd Pug</p>
+        <select class="form-control" name="accountExecutiveKey2" [(ngModel)]="fb.sidebarData.accountExecutiveKey2">
+          <option value=""></option>
+          <option *ngFor="let source of fb.userArray" value="{{source.id}}">{{source.name}}</option>
+        </select>
+      </div>
+    </div>
+
+    <p>LinkedIn</p>
+    <input class="form-control" type="text" [(ngModel)]="fb.sidebarData.linkedIn" pInputText name="linkedIn">
+
+    <p>Summary</p>
+    <textarea class="form-control" type="text" [(ngModel)]="fb.sidebarData.summary" pInputTextarea name="summary"></textarea>
+  </div>
+
+  <div class="p">
+    <button class="mb-sm btn btn-default float-left" type="button" (click)="close()">Cancel</button>
+    <button class="mb-sm btn btn-primary float-right" type="submit" (click)="submit()">Submit</button>
+  </div>
+</form>

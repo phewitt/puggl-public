@@ -1,0 +1,79 @@
+
+<ng-template tabHeading>
+  <em class="icon-layers"></em>&nbsp;&nbsp;Locations ({{data?.locationKeys?.length}})
+</ng-template>
+<div>
+
+  <div class="panel-body bb bt">
+    <div class="half-width inline mt">
+      <p-dropdown
+        [options]="fb?.locationsNameArray"
+        [styleClass]="'half-width'"
+        [(ngModel)]="locationToAdd"
+        [placeholder]="'Select Location'"
+        [filter]="true"></p-dropdown>
+      &nbsp;
+      <button class="btn btn-info" type="button" (click)="addLocation()">Add</button>
+    </div>
+    <div class="pull-right mt">
+      <button class="btn btn-primary" type="button" (click)="newLocation()">Create Location</button>
+    </div>
+  </div>
+
+
+  <!-- START list group-->
+  <div class="list-group" *ngFor="let location of data?.locationKeys">
+    <a class="list-group-item">
+      <table class="wd-wide">
+        <tbody>
+        <tr>
+          <td class="wd-xs">
+            <div class="ph">
+              <em class="icon-layers icon"></em>
+            </div>
+          </td>
+          <td class="wd-md">
+            <div class="ph">
+              <h4 class="media-box-heading">{{ fb?.locationsNameIndex[location]?.name }}</h4>
+            </div>
+          </td>
+
+          <td class="wd-sm hidden-xs hidden-sm">
+            <div class="ph">
+              <p class="m0">{{ fb?.locationsNameIndex[location]?.address?.city }} <span>&nbsp;&nbsp;</span>{{ fb?.locationsNameIndex[location]?.address?.state }}</p>
+            </div>
+          </td>
+          <td class="wd-sm hidden-xs hidden-sm">
+            <div class="ph">
+              <a class="m0" href="mailto:{{ fb?.locationsNameIndex[location]?.email }}">{{ fb?.locationsNameIndex[location]?.email }}</a>
+            </div>
+          </td>
+          <td class="wd-sm hidden-xs hidden-sm">
+            <div class="ph">
+              <a class="m0" href="tel:{{ fb?.locationsNameIndex[location]?.phone }}">{{ fb?.locationsNameIndex[location]?.phone }}</a>
+            </div>
+          </td>
+          <td class="wd-sm">
+            <div class="ph flex">
+              <a class="btn btn-info pull-right" type="button" [routerLink]="['/locations/'+ location]">View Location</a>
+              &nbsp;&nbsp;
+              <input #compRef style="display: none;" type="text" value="{{ location }}">
+              <button class="btn btn-labeled btn-inverse" (click)="edit(compRef.value)" type="button">
+                <i class="fa fa-edit"></i>
+              </button>
+              &nbsp;&nbsp;
+              <button class="btn btn-labeled btn-danger" (click)="remove(compRef.value)" type="button">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </a>
+  </div>
+  <!-- END list group-->
+</div>
+<div class="panel-footer text-right">
+  <button class="btn btn-default btn-md" [routerLink]="['/locations']">View All Locations</button>
+</div>

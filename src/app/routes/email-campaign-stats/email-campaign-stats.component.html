@@ -1,0 +1,273 @@
+<div class="content-heading">
+  Email Campaign Stats
+
+  <small><em class="icon-menu"></em>&nbsp;&nbsp;</small>
+</div>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="row text-center">
+      <div class="col-sm-12">
+        <h1 class="title">
+          {{emailCampaign.name}}
+        </h1>
+        <p class="text-center">
+          {{emailCampaign.subject}}
+        </p>
+        <h1 class="title">
+          Sent: <span class="text-primary">{{emailCampaign.dateSent | date}}</span>
+        </h1>
+      </div>
+    </div>
+    <br>
+    <div class="row margin-bottom text-center">
+      <div class="col-sm-6">
+        <div class="title">
+          Open Rate: <span class="text-primary">{{  (individualViewCount / (emailCampaign.emailTrackerKeys | async)?.length) * 100 | number:'1.0-2' }}%</span>
+        </div>
+        <progressbar value="{{  (individualViewCount / (emailCampaign.emailTrackerKeys | async)?.length) * 100 | number:'1.0-2' }}" type="info"></progressbar>
+      </div>
+      <div class="col-sm-6">
+        <div class="title">
+          Click Rate: <span class="text-primary">{{  ((emailCampaign.shortUrlClicks | async)?.length / (emailCampaign.shortUrls | async)?.length) * 100 | number:'1.0-2' }}%</span>
+        </div>
+        <progressbar value="{{  ((emailCampaign.shortUrlClicks | async)?.length / (emailCampaign.shortUrls | async)?.length) * 100 | number:'1.0-2' }}" type="info"></progressbar>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <!-- START widget-->
+        <div class="panel widget">
+          <div class="row row-table row-flush">
+            <div class="col-xs-4 bb br bt bl">
+              <div class="row row-table row-flush">
+                <div class="col-xs-4 text-center text-info">
+                  <em class="fa fa-users fa-2x"></em>
+                </div>
+                <div class="col-xs-8">
+                  <div class="panel-body text-center">
+                    <h4 class="mt0">{{ (emailCampaign.emailTrackerKeys | async)?.length }}</h4>
+                    <p class="mb0 text-muted">RECIPIENTS</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-4 bb br bt">
+              <div class="row row-table row-flush">
+                <div class="col-xs-4 text-center text-warning">
+                  <em class="fa fa-envelope-open fa-2x"></em>
+                </div>
+                <div class="col-xs-8">
+                  <div class="panel-body text-center">
+                    <h4 class="mt0">{{ (emailCampaign.emailTrackerViewKeys | async)?.length }}</h4>
+                    <p class="mb0 text-muted">OPENS</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-4 bb br bt">
+              <div class="row row-table row-flush">
+                <div class="col-xs-4 text-center text-inverse">
+                  <em class="fa fa-link fa-2x"></em>
+                </div>
+                <div class="col-xs-8">
+                  <div class="panel-body text-center">
+                    <h4 class="mt0">{{ (emailCampaign.shortUrls | async)?.length }}</h4>
+                    <p class="mb0 text-muted">LINKS</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-4 bb br bt">
+              <div class="row row-table row-flush">
+                <div class="col-xs-4 text-center text-success">
+                  <em class="fa fa-mouse-pointer fa-2x"></em>
+                </div>
+                <div class="col-xs-8">
+                  <div class="panel-body text-center">
+                    <h4 class="mt0">{{ (emailCampaign.shortUrlClicks | async)?.length }}</h4>
+                    <p class="mb0 text-muted">CLICKS</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row text-left">
+      <div class="col-md-6">
+        <h4>Users with the most views</h4>
+        <hr>
+        <div class="row" *ngFor="let link of mostViewedUserKeys;let i = index;">
+          <div class="col-md-8">
+            <h4>
+              <span *ngIf="link[2] == 'people'">
+                <em class="icon-people"></em>&nbsp;&nbsp;
+                <a [routerLink]="['/people/'+link[0]]">{{ fb.peopleNameIndex[link[0]].name }}</a>
+              </span>
+              <span *ngIf="link[2] == 'locations'">
+                <em class="icon-layers"></em>&nbsp;&nbsp;
+                <a [routerLink]="['/locations/'+link[0]]">{{ fb.locationsNameIndex[link[0]].name }}</a>
+              </span>
+              <span *ngIf="link[2] == 'companies'">
+                <em class="icon-briefcase"></em>&nbsp;&nbsp;
+                <a [routerLink]="['/companies/'+link[0]]">{{ fb.companiesNameIndex[link[0]].name }}</a>
+              </span>
+              <span *ngIf="link[2] == 'parent_companies'">
+                <em class="icon-diamond"></em>&nbsp;&nbsp;
+                <a [routerLink]="['/parent-companies/'+link[0]]">{{ fb.parentCompaniesNameIndex[link[0]].name }}</a>
+              </span>
+            </h4>
+          </div>
+          <div class="col-md-4">
+            <h4><b>{{ link[1] }}</b></h4>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-6">
+        <h4>Links with the most clicks</h4>
+        <hr>
+        <div class="row" *ngFor="let link of mostClickedKeys;let i = index;">
+          <div class="col-md-8">
+            <h4>{{i+1}}.&nbsp;&nbsp;<a href="{{link}}" target="_blank">{{ link[0] }}</a></h4>
+          </div>
+          <div class="col-md-4">
+            <h4><b>{{ link[1] }}</b></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="panel-footer margin-top">
+    <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+      <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+      <input #gb type="text" pInputText placeholder="Search" style="width: 250px !important;padding: .2em !important;">
+    </div>
+    <p-dataTable [value]="(emailTrackers | async)"
+                 [globalFilter]="gb"
+                 expandableRows="true"
+                 [rows]="25"
+                 [responsive]="true"
+                 [paginator]="true"
+                 #dt>
+      <p-column expander="true" styleClass="col-icon"></p-column>
+      <p-column field="receiverType" header="" styleClass="col-icon">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div *ngIf="car[col.field] == 'people'"><em class="icon-people"></em></div>
+          <div *ngIf="car[col.field] == 'locations'"><em class="icon-layers"></em></div>
+          <div *ngIf="car[col.field] == 'companies'"><em class="icon-briefcase"></em></div>
+          <div *ngIf="car[col.field] == 'parent_companies'"><em class="icon-diamond"></em></div>
+        </ng-template>
+      </p-column>
+      <p-column field="receiverKey" header="Web" styleClass="col-icon">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div *ngIf="car['receiverType'] == 'locations'">
+            <a class="text-primary" *ngIf="fb.locationsNameIndex[car[col.field]]?.website" href="{{ fb.locationsNameIndex[car[col.field]]?.website }}" target="_blank"><em class="icon-screen-desktop"></em></a>
+          </div>
+          <div *ngIf="car['receiverType'] == 'companies'">
+            <a class="text-primary" *ngIf="fb.companiesNameIndex[car[col.field]]?.website" href="{{ fb.companiesNameIndex[car[col.field]]?.website }}" target="_blank"><em class="icon-screen-desktop"></em></a>
+          </div>
+          <div *ngIf="car['receiverType'] == 'parent_companies'">
+            <a class="text-primary" *ngIf="fb.parentCompaniesNameIndex[car[col.field]]?.website" href="{{ fb.parentCompaniesNameIndex[car[col.field]]?.website }}" target="_blank"><em class="icon-screen-desktop"></em></a>
+          </div>
+        </ng-template>
+      </p-column>
+      <p-column field="viewsCount" header="Views" styleClass="col-button">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <p class="text-info"><b>{{ car[col.field] ? (car[col.field] | async)?.length : 0 }}</b></p>
+        </ng-template>
+      </p-column>
+      <p-column field="shortUrlClicksCount" header="Clicks" styleClass="col-button">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <p class="text-info"><b>{{ car[col.field] ? (car[col.field] | async)?.length : 0 }}</b></p>
+        </ng-template>
+      </p-column>
+      <p-column field="receiverName" header="Name" [sortable]="true" filterPlaceholder="Search" [filter]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body" styleClass="text-info">
+          <div *ngIf="car['receiverType'] == 'people'"><a [routerLink]="['/people/'+car['receiverKey']]">{{ car[col.field] }}</a></div>
+          <div *ngIf="car['receiverType'] == 'locations'"><a [routerLink]="['/locations/'+car['receiverKey']]">{{ car[col.field] }}</a></div>
+          <div *ngIf="car['receiverType'] == 'companies'"><a [routerLink]="['/companies/'+car['receiverKey']]">{{ car[col.field] }}</a></div>
+          <div *ngIf="car['receiverType'] == 'parent_companies'"><a [routerLink]="['/parent-companies/'+car['receiverKey']]">{{ car[col.field] }}</a></div>
+        </ng-template>
+      </p-column>
+      <p-column field="contact" header="Company">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div *ngFor="let item of (car[col.field] | async)?.companyKeys"><a [routerLink]="['/companies/'+item]">{{ fb?.companiesNameIndex[item]?.name }}</a></div>
+        </ng-template>
+      </p-column>
+      <p-column field="to" header="Email" [sortable]="true" filterPlaceholder="Search" [filter]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div>{{ car[col.field] }}</div>
+        </ng-template>
+      </p-column>
+      <p-column field="receiverKey" header="Software" [filter]="true" filterMatchMode="in">
+        <ng-template pTemplate="filter" let-col>
+          <p-multiSelect [options]="fb.softwares" defaultLabel="All Softwares" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+        </ng-template>
+        <ng-template let-col let-car="rowData" pTemplate="body">
+          <div *ngIf="car['receiverType'] == 'locations'">
+            {{ fb.softwareIndex[fb.locationsNameIndex[car[col.field]]?.software] }}
+          </div>
+          <div *ngIf="car['receiverType'] == 'companies'">
+            {{ fb.softwareIndex[fb.companiesNameIndex[car[col.field]]?.software] }}
+          </div>
+          <div *ngIf="car['receiverType'] == 'parent_companies'">
+            {{ fb.softwareIndex[fb.parentCompaniesNameIndex[car[col.field]]?.software] }}
+          </div>
+        </ng-template>
+      </p-column>
+      <p-column field="error" header="Error" styleClass="col-button" [sortable]="true">
+        <ng-template let-col let-car="rowData" pTemplate="body">
+            <mat-chip-list class="mat-chip-list-stacked">
+              <mat-chip *ngIf="car[col.field] == true"  selected="true" color="warn">
+                Error
+              </mat-chip>
+            </mat-chip-list>
+          <button *ngIf="car[col.field] == true" class="btn btn-square btn-default" (click)="resendEmail(car['id'])">
+            <em class="icon-refresh"></em>
+          </button>
+        </ng-template>
+      </p-column>
+
+      <ng-template let-car pTemplate="rowexpansion">
+        <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px">
+          <div class="ui-grid-row">
+            <div class="ui-grid-col-5">
+              <div class="ui-grid ui-grid-responsive ui-grid-pad text-info">
+                <p><b>Views</b></p>
+                <div class="ui-grid-row text-muted" *ngFor="let view of car.views | async">
+                  <div class="ui-grid-col-6 text-primary">{{ view?.viewed_on | date:'medium' }}</div>
+                  <div class="ui-grid-col-6">{{ view?.city }}, {{ view?.state }} {{ view?.zip }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="ui-grid-col-3">
+              <div class="ui-grid ui-grid-responsive ui-grid-pad text-info">
+                <p><b>Clicks</b></p>
+                <div class="ui-grid-row text-muted" *ngFor="let click of car.shortUrlClicks | async">
+                  <div class="ui-grid-col-12">
+                    {{ (click.click | async)?.long_url }}<br>
+                    <span class="text-primary">{{ (click.click | async)?.clicked_on | date:'medium' }}</span><br>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ui-grid-col-3">
+              <div class="ui-grid ui-grid-responsive ui-grid-pad text-info">
+                <p><b>Links</b></p>
+                <div class="ui-grid-row" *ngFor="let url of car.shortUrlKeys | async" #length>
+                  <div class="ui-grid-col-2"></div>
+                  <div class="ui-grid-col-10"><a href="{{ fb.shortUrlIndex[url.key]?.long_url }}" target="_blank">{{ fb.shortUrlIndex[url.key]?.long_url }}</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-dataTable>
+  </div>
+</div>

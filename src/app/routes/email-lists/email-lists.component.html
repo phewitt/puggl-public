@@ -1,0 +1,63 @@
+<div class="content-heading">
+  Email Lists  <button class="mb-sm btn btn-primary float-right" [routerLink]="['/email-lists/new']" type="button">Create New List</button>
+
+  <small><em class="icon-menu"></em>&nbsp;&nbsp;</small>
+
+</div>
+
+
+<!--<div class="container">-->
+  <div class="list-group" *ngFor="let et of emailLists | async">
+    <a class="list-group-item" [routerLink]="['/email-lists/'+et.id]">
+      <table class="wd-wide">
+        <tbody>
+        <tr>
+          <td class="wd-xs">
+            <div class="ph">
+              <img class="media-box-object img-responsive thumb48" src="assets/img/list.png" alt="" />
+
+            </div>
+          </td>
+          <td>
+            <div class="ph">
+              <h4 class="media-box-heading">{{ et.name }}</h4>
+              <small class="text-muted">{{ et.description }}</small>
+            </div>
+          </td>
+          <td class="wd-md hidden-xs hidden-sm">
+            <div class="ph-lg">
+              <p class="m0">Created</p>
+              <small class="text-muted">{{ et.dateCreated | date:'medium' }}</small>
+            </div>
+          </td>
+          <td class="wd-md hidden-xs hidden-sm">
+            <div class="ph-lg">
+              <p class="m0">Last change</p>
+              <small class="text-muted">{{ et.dateUpdated | date:'medium' }}</small>
+            </div>
+          </td>
+          <td class="wd-xs hidden-xs hidden-sm">
+            <div class="ph">
+              <p class="m0 text-muted">
+                <em class="icon-user mr fa-lg"></em>{{ et.items.length }}
+              </p>
+            </div>
+          </td>
+          <!--<td class="wd-xs hidden-xs hidden-sm">-->
+            <!--<div class="ph">-->
+              <!--<p class="m0 text-muted">-->
+                <!--<em class="icon-doc mr fa-lg"></em>3500-->
+              <!--</p>-->
+            <!--</div>-->
+          <!--</td>-->
+          <td class="wd-sm">
+            <div class="ph">
+              <progressbar class="m0 progress-xs" value="60" type="success">60%</progressbar>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </a>
+  </div>
+<!--</div>-->

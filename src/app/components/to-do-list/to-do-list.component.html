@@ -1,0 +1,141 @@
+<div class="panel panel-default">
+  <div class="panel-body bb bt">
+    <p class="activity-header">
+      Todo List
+      <button class="btn btn-primary float-right" type="button" (click)="addTodo()">New Todo</button>
+    </p>
+  </div>
+  <!--<div class="content-heading">Todo List-->
+  <!--<button class="pull-right btn btn-danger" (click)="clearAll()">Clear All Items</button>-->
+  <!--<small>Keeping track of tasks</small>-->
+  <!--</div>-->
+
+  <div class="table-grid todo">
+    <div class="col todo-item-list">
+      <div *ngIf="todos != undefined; else loading">
+        <div class="lead text-muted text-center" *ngIf="!todos?.length">No tasks...</div>
+      </div>
+      <accordion [closeOthers]="true">
+          <span  *ngFor="let item of todos; let i = index">
+          <accordion-group panelClass="todo-item"  *ngIf="(item.complete && showCompleted) || !item.complete">
+            <div accordion-heading [ngClass]="{'todo-complete': item.complete}">
+              <div class="inline checkbox c-checkbox" >
+                <label (click)="$event.stopPropagation()">
+                  <input type="checkbox" (change)="updateTodo(item)" [(ngModel)]="item.complete" id="{{'todo-item-'+i}}" />
+                  <span class="fa fa-check"></span>
+                </label>
+              </div>
+              <strong class="media-box-heading text-primary">{{ item.dueDate | date:'MMM d, y, h:mm a' }}</strong> - <strong class="media-box-heading text-info">{{ fb.activityTypesIndex[item.activityTypeKey] }}</strong>
+              <span class="todo-edit fa fa-pencil float-right" *ngIf="!item.complete" (click)="editTodo(item, $event)"></span>
+              <br>
+              <strong class="media-box-heading text-info">{{ fb.userIndex[item.assignToUserKey]?.name }}</strong>
+              <br>
+              <span class="todo-title" [innerHTML]="item.title">Task title</span>
+
+            </div>
+            <p>
+              <span [innerHTML]="item.description"></span>
+              <span class="text-muted" *ngIf="item.description === ''">No item description</span>
+            </p>
+          </accordion-group>
+            </span>
+      </accordion>
+
+      <p class="text-right sm-margin-right" *ngIf="todos?.length &gt; 0">
+        <button class="btn btn-sm btn-default float-left show-completed-button" (click)="toggleCompleted()">{{showCompleted ? 'Hide' : 'Show' }} Completed</button>
+        <span><b>{{ totalCompleted() }}</b> Completed</span>-
+        <span><b>{{ totalPending() }}</b> Pending</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #lgModal="bs-modal" class="modal fade" [config]="{ignoreBackdropClick: true}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="lgModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Todo</h4>
+      </div>
+      <div class="modal-body">
+        <div class="pr-lg">
+          <form class="mb-xl">
+            <div class="form-group">
+              <p>Title *</p>
+              <input class="form-control full-width" ng-trim="true" type="text" name="todoTitle" [(ngModel)]="todo.title" placeholder="Task title.." required="required" />
+            </div>
+
+            <div class="form-group">
+              <p>Activity Type*</p>
+              <select class="form-control" name="activityType" [(ngModel)]="todo.activityTypeKey">
+                <option value=""></option>
+                <option *ngFor="let source of activityTypes | async" value="{{source.id}}">{{source.name}}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <p>Assign To*</p>
+              <select class="form-control" name="user" [(ngModel)]="todo.assignToUserKey">
+                <option value=""></option>
+                <option *ngFor="let source of users | async" value="{{source.id}}">{{source.firstName}} {{source.lastName}}</option>
+              </select>
+            </div>
+
+            <div class="form-group" *ngIf="gcal.isAuthenticated">
+              <p><p-toggleButton [(ngModel)]="todo.addToGoogleCal" name="addToGoogleCal"></p-toggleButton> Add to Google Calendar</p>
+            </div>
+
+            <div class="forms-group side-by-side" *ngIf="todo.addToGoogleCal == true && gcal.isAuthenticated">
+              <div class="half-width">
+                <p>Send invites</p>
+                <p-multiSelect
+                  [options]="usersSelect | async"
+                  [styleClass]="'full-width'"
+                  [(ngModel)]="todo.gCalUserInvites"
+                  [maxSelectedLabels]="99"
+                  name="locations"
+                  [filter]="true"></p-multiSelect>
+              </div>
+              <div class="half-width">
+                <p><p-toggleButton [(ngModel)]="todo.gCalIsReminder" name="gCalIsReminder"></p-toggleButton> Set Reminder</p>
+                <p-dropdown *ngIf="todo.gCalIsReminder" [style]="{'width':'120px', 'margin-top':'-3px'}" [options]="reminderTypes" name="gCalReminderType" [(ngModel)]="todo.gCalReminderType"></p-dropdown>
+                <br>
+                <p-dropdown *ngIf="todo.gCalIsReminder" [style]="{'width':'200px', 'margin-top':'5px'}" [options]="reminderTimes" name="gCalReminderTime" [(ngModel)]="todo.gCalReminderTime"></p-dropdown>
+              </div>
+            </div>
+
+            <div class="form-group side-by-side">
+              <div class="one-fifth">
+                <p>Due Date</p>
+                <input class="form-control" bsDatepicker #dp="bsDatepicker" (bsValueChange)="updateDate($event)" [bsConfig]="bsConfig" name="dueDate" [(bsValue)]="todo.dueDate" />
+              </div>
+              <div class="one-third-width">
+                  <timepicker [(ngModel)]="todo.dueDate" name="dueDateTime"></timepicker>
+              </div>
+              <div class="minus-dash">
+                <i class="fa fa-minus" aria-hidden="true"></i>
+              </div>
+              <div class="one-third-width">
+                <timepicker [(ngModel)]="todo.dueDateEnd" name="dueDateEnd"></timepicker>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <p>Description</p>
+              <textarea class="form-control full-width" ng-trim="true" name="todoDescription" [(ngModel)]="todo.description" placeholder="Type a description.." rows="8"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit" *ngIf="editingTodo" (click)="updateTodo(todo)">Edit Todo</button>
+            <button class="btn btn-primary btn-block" type="submit" *ngIf="!editingTodo" (click)="saveNewTodo()">Add Todo</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

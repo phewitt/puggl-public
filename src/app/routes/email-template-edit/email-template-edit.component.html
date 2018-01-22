@@ -1,0 +1,51 @@
+<div class="content-heading">
+  {{ isNew ? 'New' : 'Edit' }} Email Template
+
+  <small><em class="icon-envelope-letter"></em>&nbsp;&nbsp;</small>
+
+</div>
+
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="form-group">
+          <label>Title</label>
+          <input class="form-control" [(ngModel)]="emailTemplate.title" type="text" name="title" placeholder="Enter title" />
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <p><b>Legend</b></p>
+        <div class="row">
+          <label class="col-sm-2 control-label">[FirstName]</label>
+          <div class="col-sm-4 control-label">First Name of the Contact</div>
+          <label class="col-sm-2 control-label">[FullName]</label>
+          <div class="col-sm-4 control-label">Full Name of the Contact</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-2 control-label">[Email]</label>
+          <div class="col-sm-4 control-label">Email of the Contact</div>
+          <label class="col-sm-2 control-label">[MyFirstName]</label>
+          <div class="col-sm-4 control-label">First Name of the Sender (you)</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-2 control-label">[MyFullName]</label>
+          <div class="col-sm-4 control-label">Full Name of the Sender (you)</div>
+          <label class="col-sm-2 control-label">[MyEmail]</label>
+          <div class="col-sm-4 control-label">Email of the Sender (you)</div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label>Email</label>
+        <div [froalaEditor]="options" [(froalaModel)]="emailTemplate.email"></div>
+      </div>
+
+      <div class="col-md-12 padding-top">
+        <button class="mb-sm btn btn-primary float-right" *ngIf="isNew" type="button" (click)="saveEmailTemplate()">Save</button>
+        <button class="mb-sm btn btn-primary float-right" *ngIf="!isNew" type="button" (click)="updateEmailTemplate()">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="content-heading">
+  Email Campaigns  <button class="mb-sm btn btn-primary float-right" (click)="newEmailCampaign()" type="button">Create New Campaign</button>
+
+  <small><em class="icon-folder-alt"></em>&nbsp;&nbsp;</small>
+
+</div>
+
+<div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+  <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+  <input #gb type="text" pInputText placeholder="Search" style="width: 250px !important;padding: .2em !important;">
+</div>
+<p-dataTable [value]="emailCampaigns"
+             [sortOrder]="-1"
+             [sortField]="'dateCreated'"
+             [rows]="100"
+             [responsive]="true"
+             [paginator]="true"
+             expandableRows="true"
+             [globalFilter]="gb"
+             #dt>
+  <p-column field="id" header="" styleClass="col-button">
+    <ng-template let-col let-car="rowData" pTemplate="body">
+      <a class="mb-sm btn btn-primary full-width" type="button" [routerLink]="['/email-campaigns/'+car[col.field]]">View</a>
+    </ng-template>7
+  </p-column>
+  <p-column field="id" header="" styleClass="col-button">
+    <ng-template let-col let-car="rowData" pTemplate="body">
+      <a class="mb-sm btn btn-default full-width" type="button" [routerLink]="['/email-campaigns/'+car[col.field]+'/stats']">Stats</a>
+    </ng-template>
+  </p-column>
+  <!--<p-column field="emailTrackerKeys" header="Emails" styleClass="col-button">-->
+    <!--<ng-template let-col let-car="rowData" pTemplate="body">-->
+      <!--<h4>{{(car[col.field] | async)?.length}}</h4>-->
+    <!--</ng-template>-->
+  <!--</p-column>-->
+  <p-column field="userWhoSentItKey" header="Created/Sent By" [filter]="true" filterMatchMode="in">
+    <ng-template pTemplate="filter" let-col>
+      <p-multiSelect [options]="fb.userArray" defaultLabel="All Users" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+    </ng-template>
+    <ng-template let-col let-car="rowData" pTemplate="body">
+      {{ fb.userIndex[car[col.field]]?.name }}
+    </ng-template>
+  </p-column>
+  <p-column field="hasBeenSent" header="Status" styleClass="col-status" [sortable]="true">
+    <ng-template let-col let-car="rowData" pTemplate="body">
+      <mat-chip-list>
+        <mat-chip color="primary" *ngIf="!car[col.field]" selected="true">Not Sent</mat-chip>
+        <mat-chip color="accent" *ngIf="car[col.field]" selected="true">Sent</mat-chip>
+      </mat-chip-list>
+      <span *ngIf="car[col.field]">{{ car['dateSent'] | date:'medium' }}</span>
+    </ng-template>
+  </p-column>
+  <p-column field="name" header="Name" [sortable]="true" filterPlaceholder="Search" [filter]="true"></p-column>
+  <p-column field="subject" header="Subject" [sortable]="true" filterPlaceholder="Search" [filter]="true"></p-column>
+  <p-column field="dateCreated" header="Created" [sortable]="true" filterPlaceholder="Search" [filter]="true">
+    <ng-template let-col let-car="rowData" pTemplate="body">
+      {{ car[col.field] | date:'medium' }}
+    </ng-template>
+  </p-column>
+  <p-column field="emailListKey" header="Email List" [sortable]="true">
+    <ng-template let-col let-car="rowData" pTemplate="body">
+      {{ fb.emailListIndex[car[col.field]]?.name }}
+    </ng-template>
+  </p-column>
+  <p-column field="emailTemplateKey" header="Email Template" [sortable]="true">
+    <ng-template let-col let-car="rowData" pTemplate="body">
+        {{ fb.emailTemplateIndex[car[col.field]]?.name }}
+    </ng-template>
+  </p-column>
+  <!--<p-column field="emailTrackerKeys" header="Emails Sent" styleClass="col-button" [sortable]="true">-->
+    <!--<ng-template let-col let-car="rowData" pTemplate="body">-->
+      <!--{{ (car[col.field] | async)?.length }}-->
+    <!--</ng-template>-->
+  <!--</p-column>-->
+  <!--<p-column field="emailTrackerViewKeys" header="Email Opens" styleClass="col-button" [sortable]="true">-->
+    <!--<ng-template let-col let-car="rowData" pTemplate="body">-->
+      <!--{{ (car[col.field] | async)?.length }}-->
+    <!--</ng-template>-->
+  <!--</p-column>-->
+</p-dataTable>
+
+<div bsModal #lgModal="bs-modal" class="modal fade" [config]="{ignoreBackdropClick: true}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="lgModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">New Email Campaign</h4>
+      </div>
+      <div class="modal-body">
+        <div class="pr-lg">
+          <form class="mb-xl">
+            <div class="form-group">
+              <p>Campaign Name *</p>
+              <input class="form-control full-width" ng-trim="true" type="text" name="todoTitle" [(ngModel)]="emailCampaign.name" placeholder="Campaign Name.." required="required" />
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit" (click)="createNewCampaign()">Create Campaign</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

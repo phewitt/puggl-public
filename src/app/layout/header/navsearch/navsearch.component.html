@@ -1,0 +1,33 @@
+<!-- START Search form-->
+<div class="navbar-form"  [class.open]="visible" >
+    <div class="form-group has-feedback">
+        <input class="form-control"
+               [(ngModel)]="term"
+               [typeahead]="fb.searchFields"
+               typeaheadOptionField="name"
+               typeaheadGroupField="group"
+               (typeaheadOnSelect)="typeaheadOnSelect($event)"
+               placeholder="Search for any item..." />
+        <div class="fa fa-times form-control-feedback" (click)="closeNavSearch()"></div>
+    </div>
+    <!--<button class="hidden btn btn-default" type="submit">Submit</button>-->
+</div>
+
+
+<!--<ng-template #myCustomListTemplate let-matches="matches" let-itemTemplate="itemTemplate" let-query="query">-->
+  <!--<ng-template ngFor let-match let-i="index" [ngForOf]="matches">-->
+        <!--<span *ngIf="match.isHeader()">-->
+            <!--&lt;!&ndash; this is the group name &ndash;&gt;-->
+            <!--{{match}}-->
+        <!--</span>-->
+    <!--<ng-template [ngIf]="!match.isHeader()">-->
+      <!--&lt;!&ndash; itemTemplate comes from the <input> &ndash;&gt;-->
+      <!--<ng-template [ngTemplateOutlet]="itemTemplate" [ngOutletContext]="{item: match.item, index: i, match: match, query: query}"></ng-template>-->
+    <!--</ng-template>-->
+  <!--</ng-template>-->
+<!--</ng-template>-->
+
+<!--<ng-template #myCustomItemTemplate let-model="item" let-index="index">-->
+  <!--<span> Model {{index}}: {{ model | json }} </span>-->
+<!--</ng-template>-->
+<!-- END Search form-->

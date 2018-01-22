@@ -1,0 +1,81 @@
+
+<ng-template tabHeading>
+  <em class="icon-briefcase"></em>&nbsp;&nbsp;Companies ({{data?.companyKeys?.length}})
+</ng-template>
+<div>
+
+  <div class="panel-body bb bt">
+    <div class="half-width inline mt">
+      <p-dropdown
+        [options]="fb?.companiesNameArray"
+        [styleClass]="'half-width'"
+        [(ngModel)]="companyToAdd"
+        [placeholder]="'Select Company'"
+        [filter]="true"></p-dropdown>
+      &nbsp;
+      <button class="btn btn-info" type="button" (click)="addCompany()">Add</button>
+    </div>
+    <div class="pull-right mt">
+      <button class="btn btn-primary" type="button" (click)="newCompany()">Create Company</button>
+    </div>
+  </div>
+
+
+  <!-- START list group-->
+  <div *ngIf="data?.companyKeys">
+    <div class="list-group"  *ngFor="let company of data?.companyKeys">
+      <a class="list-group-item">
+        <table class="wd-wide">
+          <tbody>
+          <tr>
+            <td class="wd-xs">
+              <div class="ph">
+                <em class="icon-briefcase icon"></em>
+              </div>
+            </td>
+            <td class="wd-md">
+              <div class="ph">
+                <h4 class="media-box-heading">{{ fb?.companiesNameIndex[company]?.name }}</h4>
+              </div>
+            </td>
+
+            <td class="wd-sm hidden-xs hidden-sm">
+              <div class="ph">
+                <p class="m0">{{ fb?.companiesNameIndex[company]?.address?.city }} <span>&nbsp;&nbsp;</span>{{ fb?.companiesNameIndex[company]?.address?.state }}</p>
+              </div>
+            </td>
+            <td class="wd-sm hidden-xs hidden-sm">
+              <div class="ph">
+                <a class="m0" href="mailto:{{ fb?.companiesNameIndex[company]?.email }}">{{ fb?.companiesNameIndex[company]?.email }}</a>
+              </div>
+            </td>
+            <td class="wd-sm hidden-xs hidden-sm">
+              <div class="ph">
+                <a class="m0" href="tel:{{ fb?.companiesNameIndex[company]?.phone }}">{{ fb?.companiesNameIndex[company]?.phone }}</a>
+              </div>
+            </td>
+            <td class="wd-sm">
+              <div class="ph flex">
+                <a class="btn btn-info pull-right text-white" [routerLink]="['/companies/'+ company]">View Company</a>
+                &nbsp;&nbsp;
+                <input #compRef style="display: none;" type="text" value="{{ company }}">
+                <button class="btn btn-labeled btn-inverse" (click)="edit(compRef.value)" type="button">
+                  <i class="fa fa-edit"></i>
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-labeled btn-danger" (click)="remove(compRef.value)" type="button">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </a>
+    </div>
+  </div>
+  <!-- END list group-->
+</div>
+<div class="panel-footer text-right">
+  <button class="btn btn-default btn-md" [routerLink]="['/companies']">View All Companies</button>
+</div>

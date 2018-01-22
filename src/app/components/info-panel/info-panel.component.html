@@ -1,0 +1,90 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+    <p class="lead bb">{{title}}</p>
+    <form class="form-horizontal p-20">
+      <div class="form-group" *ngIf="data?.title">
+        <div class="col-sm-4">Title:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.title }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.email">
+        <div class="col-sm-4">Email:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.email }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.phone">
+        <div class="col-sm-4">Phone:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.phone }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.workPhone">
+        <div class="col-sm-4">Work Phone:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.workPhone }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.source">
+        <div class="col-sm-4">Source:</div>
+        <div class="col-sm-8">
+          <strong>{{ fb.sourceIndex[data?.source] }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.software">
+        <div class="col-sm-4">Software:</div>
+        <div class="col-sm-8">
+          <strong>{{ fb.softwareIndex[data?.software] }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.numberOfUnits">
+        <div class="col-sm-4">Number of Units:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.numberOfUnits }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.numberOfLocations">
+        <div class="col-sm-4">Number of Locations:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.numberOfLocations }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.fax">
+        <div class="col-sm-4">Fax:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.fax }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.linkedIn">
+        <div class="col-sm-4">LinkedIn:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.linkedIn }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.website">
+        <div class="col-sm-4">Website:</div>
+        <div class="col-sm-8">
+          <strong><a href="{{ data?.website }}" target="_blank">{{ data?.website }}</a></strong>
+        </div>
+      </div>
+
+      <div class="form-group text-show-format" *ngIf="data?.summary">
+        <div class="col-sm-4">Summary:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.summary }}</strong>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="data?.address">
+        <div class="col-sm-4">Address:</div>
+        <div class="col-sm-8">
+          <strong>{{ data?.address?.street }}</strong><br *ngIf="data?.address?.street">
+          <strong>{{ data?.address?.street2 }}</strong><br *ngIf="data?.address?.street2">
+          <strong>{{ data?.address?.city }}
+            <span *ngIf="data?.address?.city && data?.address?.state">,&nbsp;&nbsp;</span>
+            {{ data?.address?.state }}&nbsp;&nbsp;{{ data?.address?.zip }}</strong><br *ngIf="data?.address?.zip">
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

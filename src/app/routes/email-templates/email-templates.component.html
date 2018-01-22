@@ -1,0 +1,64 @@
+<div class="content-heading">
+  Email Templates  <button class="mb-sm btn btn-primary float-right" [routerLink]="['/email-templates/new']" type="button">Add New Email Template</button>
+
+  <small><em class="icon-envelope-letter"></em>&nbsp;&nbsp;</small>
+
+</div>
+
+
+<!-- START Multiple List group-->
+<div class="list-group" *ngFor="let et of emailTemplates | async">
+  <a class="list-group-item" [routerLink]="['/email-templates/'+et.id]">
+    <table class="wd-wide">
+      <tbody>
+      <tr>
+        <td class="wd-xs">
+          <div class="ph">
+            <img class="media-box-object img-responsive img-rounded thumb48" src="assets/img/template.png" alt="" />
+          </div>
+        </td>
+        <td>
+          <div class="ph">
+            <h4 class="media-box-heading">{{ et.title }}</h4>
+            <small class="text-muted">{{ et.subject }}</small>
+          </div>
+        </td>
+        <td class="wd-md hidden-xs hidden-sm">
+          <div class="ph">
+            <p class="m0">Created</p>
+            <small class="text-muted">{{ et.dateCreated | date:'medium' }}</small>
+          </div>
+        </td>
+        <td class="wd-md hidden-xs hidden-sm">
+          <div class="ph">
+            <p class="m0">Last change</p>
+            <small class="text-muted">{{ et.dateUpdated | date:'medium' }}</small>
+          </div>
+        </td>
+        <td class="wd-xs hidden-xs hidden-sm">
+          <div class="ph">
+            Sent to
+            <p class="m0 text-muted">
+              <em class="icon-user mr fa-lg"></em>26
+            </p>
+          </div>
+        </td>
+        <td class="wd-xs hidden-xs hidden-sm">
+          <div class="ph">
+            Opens
+            <p class="m0 text-muted">
+              <em class="icon-doc mr fa-lg"></em>3500
+            </p>
+          </div>
+        </td>
+        <td class="wd-sm">
+          <div class="ph">
+            <progressbar class="m0 progress-xs" value="80" type="success">80%</progressbar>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </a>
+</div>
+<!-- END Multiple List group-->

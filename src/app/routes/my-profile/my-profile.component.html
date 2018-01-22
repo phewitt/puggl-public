@@ -1,0 +1,181 @@
+<div class="container-md">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="panel b">
+        <div class="panel-heading bg-gray-lighter text-bold">Personal Settings</div>
+        <div class="list-group">
+          <a class="list-group-item" (click)="setSettingActive(1)" [ngClass]="{'active': (settingActive == 1)}">Profile</a>
+          <a class="list-group-item" (click)="setSettingActive(2)" [ngClass]="{'active': (settingActive == 2)}">SMTP Email Setup</a>
+          <a class="list-group-item" (click)="setSettingActive(3)" [ngClass]="{'active': (settingActive == 3)}">Email Signature</a>
+          <a class="list-group-item" (click)="setSettingActive(4)" [ngClass]="{'active': (settingActive == 4)}">Google Calendar</a>
+          <a class="list-group-item" (click)="setSettingActive(5)" [ngClass]="{'active': (settingActive == 5)}">Change Password</a>
+          <a class="list-group-item" (click)="setSettingActive(6)" [ngClass]="{'active': (settingActive == 6)}">Cache</a>
+          <a class="list-group-item" (click)="setSettingActive(7)" [ngClass]="{'active': (settingActive == 7)}">Import</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-9">
+
+      <div *ngIf="settingActive == 1">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">My Information</div>
+          <div class="panel-body">
+
+              <div class="form-group">
+                <label>First Name</label>
+                <input class="form-control" (change)="saveUserData()" type="string" name="fname" [(ngModel)]="firstName" placeholder="First Name" />
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input class="form-control" (change)="saveUserData()" type="string" name="lname" [(ngModel)]="lastName" placeholder="Last Name" />
+              </div>
+              <div class="form-group">
+                <label>Email Login</label>
+                <input class="form-control" (change)="saveUserData()" type="email" name="email" [(ngModel)]="email" placeholder="Enter email" />
+              </div>
+            <!--<button class="btn btn-sm btn-info" (click)="saveUserData()" type="submit">Submit</button>-->
+
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="settingActive == 2">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">Google Account
+            <button class="btn btn-sm btn-primary float-right test-email" *ngIf="googleEmail != '' && googlePassword != ''" (click)="showSendTestEmailModal()">Send Test Email</button>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label>Email Address</label>
+              <input class="form-control" (change)="saveUserData()" type="email" name="googleEmail" [(ngModel)]="googleEmail"/>
+            </div>
+            <div class="form-group">
+              <label>Email Password</label>
+              <input class="form-control" (change)="saveUserData()" type="password" name="googlePassword" [(ngModel)]="googlePassword"/>
+            </div>
+            <!--<button class="btn btn-sm btn-info" (click)="saveUserData()" type="submit">Submit</button>-->
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="settingActive == 3">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">Email Signature</div>
+          <div class="panel-body">
+            <p>For best results use "Code View" to paste your signature in.</p>
+            <div [froalaEditor]="options" [(froalaModel)]="emailSignature"></div>
+            <br><br>
+            <button class="btn btn-sm btn-info" (click)="saveUserData()" type="submit">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="settingActive == 4">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">Google Calendar Auth</div>
+          <div class="panel-body">
+
+            <button class="btn btn-sm btn-info" *ngIf="!gcal.isAuthenticated" (click)="gcalSignIn()">Authenticate</button>
+            <button class="btn btn-sm btn-primary" *ngIf="gcal.isAuthenticated" (click)="gcalSignOut()">Sign Out</button>
+
+            <div *ngFor="let calendar of gcal.calendarList">
+              <!--{{ calendar.summ }}-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="settingActive == 5">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">Update Password</div>
+          <div class="panel-body">
+
+              <button class="btn btn-sm btn-info" type="submit" (click)="resetPassword()">Reset your password</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="settingActive == 6">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">Cache</div>
+          <div class="panel-body">
+            <!--<button class="btn btn-sm btn-info" type="submit" (click)="clearCache('people')">Reset People Cache</button>-->
+            <!--<button class="btn btn-sm btn-info" type="submit" (click)="clearCache('companies')">Reset Companies Cache</button>-->
+            <button class="btn btn-sm btn-info" type="submit" (click)="clearCache('most')">Reset Cache</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="settingActive == 7">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">Import</div>
+          <div class="panel-body">
+            <h4>People: {{peopleCount}}</h4>
+            <br>
+            <h4>Companies: {{companyCount}}</h4>
+            <br>
+            <h4>Locations: {{locationCount}}</h4>
+            <br>
+            <textarea class="form-control" type="text" [(ngModel)]="importData" pInputTextarea name="summary"></textarea>
+            <br>
+            <br>
+            <button class="btn btn-sm btn-info" type="submit" (click)="importCompaniesFunction()">Import Companies</button>
+            <button class="btn btn-sm btn-info" type="submit" (click)="importPeopleFunction()">Import People</button>
+            <button class="btn btn-sm btn-info" type="submit" (click)="importPeopleMailchimpFunction()">Import People MailChimp</button>
+            <button class="btn btn-sm btn-info" type="submit" (click)="importPeopleSSA()">Import People From SSA</button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="settingActive == 7">
+        <div class="panel b">
+          <div class="panel-heading bg-gray-lighter text-bold">Import</div>
+          <div class="panel-body">
+            <h4>No Activity: {{locationsWithNoActivity}}</h4>
+            <br>
+            <h4>No Todos: {{locationsWithNoTodos}}</h4>
+            <br>
+            <button class="btn btn-sm btn-info" type="submit" (click)="removeAllItemsWithNoActivityOrTodos('locations')">Remove All Locations with no Activity</button>
+            <button class="btn btn-sm btn-info" type="submit" (click)="removeAllItemsWithNoActivityOrTodos('companies')">Remove All Companies with no Activity</button>
+            <button class="btn btn-sm btn-info" type="submit" (click)="removeAllItemsWithNoActivityOrTodos('people')">Remove All People with no Activity</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div bsModal #lgModal="bs-modal" class="modal fade" [config]="{ignoreBackdropClick: true}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="lgModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Todo</h4>
+      </div>
+      <div class="modal-body">
+        <div class="pr-lg">
+          <form class="mb-xl">
+            <div class="form-group">
+              <p>To *</p>
+              <input class="form-control full-width" ng-trim="true" type="text" name="to" [(ngModel)]="testEmail.to" placeholder="To.." required="required" />
+            </div>
+            <div class="form-group">
+              <p>Title *</p>
+              <input class="form-control full-width" ng-trim="true" type="text" name="subject" [(ngModel)]="testEmail.subject" placeholder="Task title.." required="required" />
+            </div>
+            <div class="form-group">
+              <mat-slide-toggle [(ngModel)]="testEmail.useSignature" name="useSignature">Include Email Signature</mat-slide-toggle>
+            </div>
+
+            <div class="form-group">
+              <p>Body</p>
+              <div [froalaEditor]="emailOptions" name="body" [(froalaModel)]="testEmail.body"></div>
+
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit" (click)="sendTestEmail()">Send Email</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

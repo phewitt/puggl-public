@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "prod": "sp-puggl-app",
+    "dev": "sp-dev-puggl-app"
+  }
+}

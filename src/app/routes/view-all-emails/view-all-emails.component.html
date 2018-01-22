@@ -1,0 +1,137 @@
+<div class="content-heading">
+  View All Emails
+  <small><em class="icon-envelope-letter"></em>&nbsp;&nbsp;Emails</small>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p>View Emails For User</p>
+        <div class="one-fifth">
+          <select class="form-control" name="source" [(ngModel)]="user">
+            <option value=""></option>
+            <option *ngFor="let source of fb.userArray" value="{{source.id}}">{{source.name}}</option>
+          </select>
+        </div>
+        <div class="one-fifth margin-bottom button-top">
+          <button class="btn btn-primary float-right" type="button" (click)="updateEmails()">Update</button>
+        </div>
+        <div *ngIf="emailTrackers != undefined; else loading">
+          <p-dataTable [value]="emailTrackers"
+                       expandableRows="true"
+                       [rows]="50"
+                       [responsive]="true"
+                       [paginator]="true"
+                       #dt>
+            <p-column expander="true" styleClass="col-icon"></p-column>
+            <p-column field="emailCampaignKey" header="" styleClass="col-icon">
+              <ng-template let-col let-car="rowData" pTemplate="body">
+                <a *ngIf="car[col.field] == 'solo_email'" (click)="showViewEmailModal(car['soloEmailId'])"><em class="icon-envelope-letter"></em></a>
+                <a *ngIf="car[col.field] != 'solo_email'" [routerLink]="['/email-campaigns/'+car[col.field]]"><em class="icon-folder-alt"></em></a>
+              </ng-template>
+            </p-column>
+            <p-column field="sentBy" header="Sent By" [sortable]="true">
+              <ng-template let-col let-car="rowData" pTemplate="body">
+                <div>{{ fb.userIndex[car[col.field]]?.name }}</div>
+              </ng-template>
+            </p-column>
+            <p-column field="receiverName" header="Sent To" [sortable]="true">
+              <ng-template let-col let-car="rowData" pTemplate="body">
+                <div *ngIf="car['receiverType'] == 'people'">
+                  <em class="icon-people"></em>
+                  <a [routerLink]="['/people/'+car['receiverKey']]">{{ car[col.field] }}</a>
+                </div>
+                <div *ngIf="car['receiverType'] == 'companies'">
+                  <em class="icon-briefcase"></em>
+                  <a [routerLink]="['/companies/'+car['receiverKey']]">{{ car[col.field] }}</a>
+                </div>
+                <div *ngIf="car['receiverType'] == 'locations'">
+                  <em class="icon-layers"></em>
+                  <a [routerLink]="['/locations/'+car['receiverKey']]">{{ car[col.field] }}</a>
+                </div>
+                <div *ngIf="car['receiverType'] == 'parent_companies'">
+                  <em class="icon-diamond"></em>
+                  <a [routerLink]="['/parent-companies/'+car['receiverKey']]">{{ car[col.field] }}</a>
+                </div>
+              </ng-template>
+            </p-column>
+            <p-column field="date" header="Date" [sortable]="true">
+              <ng-template let-col let-car="rowData" pTemplate="body">
+                <div>{{ car[col.field] | date:'medium' }}</div>
+              </ng-template>
+            </p-column>
+            <p-column field="views" header="Views" styleClass="col-button" [sortable]="true">
+              <ng-template let-col let-car="rowData" pTemplate="body">
+                <p class="text-info"><b>{{ car[col.field].length }}</b></p>
+              </ng-template>
+            </p-column>
+            <p-column field="shortUrlClicks" header="Clicks" styleClass="col-button" [sortable]="true">
+              <ng-template let-col let-car="rowData" pTemplate="body">
+                <p class="text-info"><b>{{ car[col.field].length }}</b></p>
+              </ng-template>
+            </p-column>
+            <ng-template let-car pTemplate="rowexpansion">
+              <div class="ui-grid ui-grid-responsive ui-fluid">
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-12">
+                    {{ car.to }}
+                  </div>
+                </div>
+                <div class="ui-grid-row">
+                  <div class="ui-grid-col-6">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad text-info">
+                      <p><b>Views</b></p>
+                      <div class="ui-grid-row text-muted" *ngFor="let view of car.views">
+                        <div class="ui-grid-col-6 text-primary">{{ view?.viewed_on | date:'medium' }}</div>
+                        <div class="ui-grid-col-6">{{ view?.city }}, {{ view?.state }} {{ view?.zip }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ui-grid-col-6">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad text-info">
+                      <p><b>Clicks</b></p>
+                      <div class="ui-grid-row text-muted" *ngFor="let click of car.shortUrlClicks">
+                        <div class="ui-grid-col-12">
+                          {{ click.click?.long_url }}<br>
+                          <span class="text-primary">{{ click.click.clicked_on | date:'medium' }}</span><br>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </p-dataTable>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #emailModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myEmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="emailModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <p class="modal-title">Email</p>
+      </div>
+      <div class="modal-body">
+        <div class="pr-lg">
+          <h4><b>Subject</b></h4>
+          <div [innerHTML]="soloEmail?.subject | keepHtml"></div>
+          <hr>
+          <h4><b>Body</b></h4>
+          <div [innerHTML]="soloEmail?.body | keepHtml"></div>
+          <div *ngIf="soloEmail?.useSignature" [innerHTML]="(soloEmail?.user | async)?.emailSignature | keepHtml"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

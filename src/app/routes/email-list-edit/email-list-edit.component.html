@@ -1,0 +1,73 @@
+<div class="content-heading">
+  {{ isNew ? 'New' : 'Edit' }} Email List
+
+  <small><em class="icon-menu"></em>&nbsp;&nbsp;</small>
+
+</div>
+
+<div class="row">
+  <div class="col-lg-3 col-md-4">
+    <!-- START panel-->
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group">
+          <label>Title</label>
+          <input class="form-control" [(ngModel)]="fb.emailList.name" type="text" name="title" placeholder="Enter title" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" [(ngModel)]="fb.emailList.description" type="text" name="title" placeholder="Enter description" ></textarea>
+        </div>
+        <div class="col-md-12">
+          <button class="mb-sm btn btn-primary float-right" *ngIf="isNew" type="button" (click)="saveEmailList()">Save</button>
+          <button class="mb-sm btn btn-primary float-right" *ngIf="!isNew" type="button" (click)="updateEmailList()">Update</button>
+        </div>
+        <p>Items <b>({{fb?.emailList?.items.length}})</b></p>
+        <p-dataTable [value]="fb.emailList.items" [immutable]="false">
+          <p-column field="type" header="" styleClass="col-icon">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngIf="car[col.field] == 'people'"><em class="icon-people"></em></div>
+              <div *ngIf="car[col.field] == 'locations'"><em class="icon-layers"></em></div>
+              <div *ngIf="car[col.field] == 'companies'"><em class="icon-briefcase"></em></div>
+              <div *ngIf="car[col.field] == 'parent_companies'"><em class="icon-diamond"></em></div>
+            </ng-template>
+          </p-column>
+          <p-column field="type" header="Name">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngIf="car[col.field] == 'people'">{{ fb.peopleNameIndex[car['key']]?.name }}</div>
+              <div *ngIf="car[col.field] == 'locations'">{{ fb.locationsNameIndex[car['key']]?.name }}</div>
+              <div *ngIf="car[col.field] == 'companies'">{{ fb.companiesNameIndex[car['key']]?.name }}</div>
+              <div *ngIf="car[col.field] == 'parent_companies'">{{ fb.parentCompaniesNameIndex[car['key']]?.name }}</div>
+            </ng-template>
+          </p-column>
+          <p-column field="type" header="Email">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngIf="car[col.field] == 'people'">{{ fb.peopleNameIndex[car['key']]?.email }}</div>
+              <div *ngIf="car[col.field] == 'locations'">{{ fb.locationsNameIndex[car['key']]?.email }}</div>
+              <div *ngIf="car[col.field] == 'companies'">{{ fb.companiesNameIndex[car['key']]?.email }}</div>
+              <div *ngIf="car[col.field] == 'parent_companies'">{{ fb.parentCompaniesNameIndex[car['key']]?.email }}</div>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9 col-md-8">
+    <div class="panel">
+      <tabset class="bg-white p0" [justified]="true">
+        <tab>
+          <email-list-people></email-list-people>
+        </tab>
+        <tab>
+          <email-list-companies></email-list-companies>
+        </tab>
+        <tab>
+          <email-list-locations></email-list-locations>
+        </tab>
+        <tab>
+          <email-list-parent-companies></email-list-parent-companies>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+</div>

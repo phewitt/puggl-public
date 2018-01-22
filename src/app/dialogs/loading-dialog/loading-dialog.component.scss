@@ -1,0 +1,16 @@
+@import "../../shared/styles/app.scss";
+
+.pacman > div:first-of-type,
+.pacman > div:nth-child(2)
+{
+  border-top-color: $accent-hex;
+  border-left-color: $accent-hex;
+  border-bottom-color: $accent-hex;
+}
+
+.pacman > div:nth-child(3),
+.pacman > div:nth-child(4),
+.pacman > div:nth-child(5),
+.pacman > div:nth-child(6) {
+  background-color: $accent-hex;
+}

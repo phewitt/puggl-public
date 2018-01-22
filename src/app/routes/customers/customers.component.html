@@ -1,0 +1,108 @@
+<div class="content-heading">
+  Customers - {{numCustomers}}
+
+  <small><em class="icon-badge"></em>&nbsp;&nbsp;</small>
+
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input #gbb type="text" pInputText placeholder="Search" style="width: 250px !important;padding: .2em !important;">
+        </div>
+        <p-dataTable [value]="customers"
+                     [sortField]="'dateAdded'"
+                     [sortOrder]="-1"
+                     [rows]="25"
+                     [paginator]="true"
+                     [globalFilter]="gbb"
+                     #dt>
+          <p-column field="emailTrackerKeys" header="Email" styleClass="col-icon" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <h4 class="text-info"><b>{{ car[col.field]?.length ? car[col.field]?.length : 0 }}</b></h4>
+            </ng-template>
+          </p-column>
+          <p-column field="peopleKeys" header="People" styleClass="col-icon" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <h4 class="text-primary">{{ car[col.field].length }}</h4>
+            </ng-template>
+          </p-column>
+          <p-column field="name" header="Name" [sortable]="true" filterPlaceholder="Search" [filter]="true"></p-column>
+          <p-column field="website" header="Website" styleClass="col-icon" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <a class="text-primary" *ngIf="car[col.field]" href="{{ car[col.field] }}" target="_blank"><em class="icon-screen-desktop"></em></a>
+            </ng-template>
+          </p-column>
+          <p-column field="accountExecutiveKey" header="A.E." [filter]="true" filterMatchMode="in">
+            <ng-template pTemplate="filter" let-col>
+              <p-multiSelect [options]="fb.userArray" defaultLabel="All Users" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+            </ng-template>
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              {{fb.userIndex[car[col.field]]?.name}}
+            </ng-template>
+          </p-column>
+          <p-column field="lastActivityDate" header="Last Activity" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <b class="text-primary">{{ car[col.field] | date:'M/d/yy' }}</b>
+              <br>
+              <b>{{ fb.activityTypesIndex[car['lastActivityTypeKey']] }}</b>
+              <br>
+              <span class="text-muted">{{ fb.userIndex[car['lastActivityPostedByKey']]?.name }}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="nextTodoDate" header="Next Todo" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <b class="text-primary">{{ car[col.field] | date:'M/d/yy' }}</b>
+              <br>
+              <b>{{ fb.activityTypesIndex[car['nextTodoTypeKey']] }}</b>
+              <br>
+              <span class="text-muted">{{ fb.userIndex[car['nextTodoUserKey']]?.name }}</span>
+            </ng-template>
+          </p-column>
+          <p-column field="address.city" header="City" [sortable]="true" filterPlaceholder="Search" [filter]="true"></p-column>
+          <p-column field="address.state" header="State" [sortable]="true" filterPlaceholder="Search" [filter]="true"></p-column>
+          <p-column field="email" header="Email" [sortable]="true"></p-column>
+          <p-column field="phone" header="Phone" [sortable]="true"></p-column>
+          <p-column field="fax" header="Fax" [sortable]="true"></p-column>
+          <p-column field="source" header="Source" [filter]="true" filterMatchMode="in">
+            <ng-template pTemplate="filter" let-col>
+              <p-multiSelect [options]="fb.sources" defaultLabel="Source" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+            </ng-template>
+            <ng-template let-col let-car="rowData" pTemplate="body" >
+              {{ fb.sourceIndex[car[col.field]] }}
+            </ng-template>
+          </p-column>
+          <p-column field="software" header="Software" [filter]="true" filterMatchMode="in">
+            <ng-template pTemplate="filter" let-col>
+              <p-multiSelect [options]="fb.softwares" defaultLabel="Software" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+            </ng-template>
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              {{ fb.softwareIndex[car[col.field]] }}
+            </ng-template>
+          </p-column>
+          <p-column field="dateAdded" header="Created On" styleClass="col-date" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              {{ car[col.field] | date}}
+            </ng-template>
+          </p-column>
+          <p-column field="id" header="" styleClass="col-edit">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <button class="mb-sm btn btn-default full-width" (click)="edit(car[col.field])">
+                <i class="fa fa-edit"></i>
+              </button>
+            </ng-template>
+          </p-column>
+          <p-column field="id" header="" styleClass="col-date">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+
+              <a class="mb-sm btn btn-info full-width" [routerLink]="['/companies/'+car[col.field]]">View</a>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="content-heading">
+  <span *ngIf="leadType == 'hot'">Hot Leads ({{ leads?.length }})</span>
+  <span *ngIf="leadType == 'warm'">Warm Leads ({{ leads?.length }})</span>
+  <span *ngIf="leadType == 'cold'">Cold Leads ({{ leads?.length }})</span>
+
+  <small *ngIf="leadType == 'hot'"><em class="icon-fire"></em>&nbsp;&nbsp;</small>
+  <small *ngIf="leadType == 'warm'"><em class="icon-cup"></em>&nbsp;&nbsp;</small>
+  <small *ngIf="leadType == 'cold'"><em class="icon-direction"></em>&nbsp;&nbsp;</small>
+
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <!--<h4>Cold: {{ cold?.length }}</h4>-->
+    <!--<button class="btn btn-info" (click)="addWarmLeads()">Add Warm Leads</button>-->
+    <!--<button class="btn btn-info" (click)="addColdLeads()">Add Cold Leads</button>-->
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input #gb type="text" pInputText placeholder="Search" style="width: 250px !important;padding: .2em !important;">
+        </div>
+        <p-dataTable [value]="leads"
+                     [sortField]="'dateAdded'"
+                     [sortOrder]="-1"
+                     [rows]="25"
+                     [paginator]="true"
+                     [loading]="loading"
+                     [globalFilter]="gb"
+                     #dt>
+          <p-column field="name" header="" styleClass="col-icon">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <span *ngIf="car['receiverType'] == 'people'">
+                <em class="icon-people"></em>
+              </span>
+              <span *ngIf="car['receiverType'] == 'locations'">
+                <em class="icon-layers"></em>
+              </span>
+              <span *ngIf="car['receiverType'] == 'companies'">
+                <em class="icon-briefcase"></em>
+              </span>
+              <span *ngIf="car['receiverType'] == 'parent_companies'">
+            <em class="icon-diamond"></em>
+          </span>
+            </ng-template>
+          </p-column>
+          <p-column field="name" header="Name" [sortable]="true" filterPlaceholder="Search" [filter]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <span *ngIf="car['receiverType'] == 'people'">
+                <a class="item-display" [routerLink]="['/people/'+car['receiverKey']]">{{ car[col.field] }}</a>
+              </span>
+              <span *ngIf="car['receiverType'] == 'locations'">
+                <a class="item-display" [routerLink]="['/locations/'+car['receiverKey']]">{{ car[col.field] }}</a>
+              </span>
+              <span *ngIf="car['receiverType'] == 'companies'">
+                <a class="item-display" [routerLink]="['/companies/'+car['receiverKey']]">{{ car[col.field] }}</a>
+              </span>
+              <span *ngIf="car['receiverType'] == 'parent_companies'">
+                <a class="item-display" [routerLink]="['/parent-companies/'+car['receiverKey']]">{{ car[col.field] }}</a>
+              </span>
+            </ng-template>
+          </p-column>
+          <p-column field="views" header="Views" styleClass="col-icon" [sortable]="true"></p-column>
+          <p-column field="clicks" header="Clicks" styleClass="col-icon" [sortable]="true"></p-column>
+          <p-column field="email" header="Email" [sortable]="true"></p-column>
+          <p-column field="phone" header="Phone" [sortable]="true"></p-column>
+          <p-column field="city" header="City" [sortable]="true"></p-column>
+          <p-column field="state" header="State" [sortable]="true"></p-column>
+          <p-column field="dateAdded" header="Created On" styleClass="col-date" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              {{ car[col.field] | date}}
+            </ng-template>
+          </p-column>
+          <p-column field="receiverKey" header="" styleClass="col-edit">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <button class="mb-sm btn btn-default full-width" (click)="editItem(car[col.field], car['receiverType'])">
+                <i class="fa fa-edit"></i>
+              </button>
+            </ng-template>
+          </p-column>
+          <!--<p-column field="receiverKey" header="" styleClass="col-date">-->
+            <!--<ng-template let-col let-car="rowData" pTemplate="body">-->
+              <!--<a class="mb-sm btn btn-info full-width" [routerLink]="['/people/'+car[col.field]]">View</a>-->
+            <!--</ng-template>-->
+          <!--</p-column>-->
+        </p-dataTable>
+      </div>
+    </div>
+  </div>
+</div>

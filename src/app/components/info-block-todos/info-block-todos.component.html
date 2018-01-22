@@ -1,0 +1,256 @@
+<div class="panel b">
+  <div class="panel-heading">
+    <h3>Todos
+      <mat-slide-toggle class="float-right" (change)="toggleUserKey()" name="showOnlyMyTodos" [(ngModel)]="fb.showOnlyMyTodos">Show only me</mat-slide-toggle>
+      <mat-slide-toggle class="float-right pr-sm" (change)="toggleShowComplete()" name="showCompleteTodos" [(ngModel)]="fb.showCompleteTodos">Show completed</mat-slide-toggle>&nbsp;&nbsp;
+      <!--<mat-slide-toggle class="float-right" (click)="toggleUserKey()" >Show only me</mat-slide-toggle>-->
+      <!--<mat-slide-toggle class="float-right pr-sm" (click)="toggleShowComplete()">Show completed</mat-slide-toggle>&nbsp;&nbsp;-->
+    </h3>
+  </div>
+  <div class="panel-body">
+    <tabset [justified]="true">
+      <tab heading="Past Due ({{ pastDueCount }})" id="tab1">
+        <div class="list-group" *ngIf="pastDueCount == 0">
+          <div class="list-group-item">
+            <table class="wd-wide">
+              <tbody>
+              <tr>
+                <td class="wd-md">
+                  <div class="ph text-center padding-top padding-bottom">
+                    <strong class="media-box-heading text-info text-uppercase">No Past Due Todos</strong><br>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div *ngFor="let todo of todos | async">
+          <div class="list-group" *ngIf="(todo?.dueDate?.getTime() ) < (today?.getTime()) && (todo.dueDate?.getDate()+'+'+todo.dueDate.getMonth() ) != (today.getDate()+'+'+today.getMonth())">
+            <div class="list-group-item">
+              <table class="wd-wide">
+                <tbody>
+                <tr>
+                  <td class="wd-sm">
+                    <div class="ph">
+                      <mat-chip-list>
+                        <mat-chip *ngIf="todo.complete" color="primary" selected="true">Completed</mat-chip>
+                        <mat-chip *ngIf="!todo.complete" color="accent" selected="true">Not Complete</mat-chip>
+                      </mat-chip-list>
+                    </div>
+                  </td>
+                  <td class="wd-md">
+                    <div class="ph">
+                      <strong class="media-box-heading text-info text-uppercase">{{ fb.activityTypesIndex[todo.activityTypeKey] }}</strong><br>
+                      <small class="text-muted">{{ todo.title }}</small>
+                      <h4 class="media-box-heading">{{ fb.userIndex[todo.assignToUserKey]?.name }}</h4>
+                    </div>
+                  </td>
+                  <td class="wd-md hidden-xs hidden-sm">
+                    <div class="ph">
+                      <span *ngIf="todo?.associateToType == 'people'">
+                        <em class="icon-people"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/people/'+todo.associateToKey]">{{ fb.peopleNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'locations'">
+                        <em class="icon-layers"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/locations/'+todo.associateToKey ]">{{ fb.locationsNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'companies'">
+                        <em class="icon-briefcase"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/companies/'+todo.associateToKey]">{{ fb.companiesNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'parent_companies'">
+                        <em class="icon-diamond"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/parent-companies/'+todo.associateToKey ]">{{ fb.parentCompaniesNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="wd-md hidden-xs hidden-sm">
+                    <div class="ph">
+                      <p class="m0">DUE DATE</p>
+                      <p class="text-muted"><b>{{ todo.dueDate | date:'MMM d, y h:mm a' }}</b></p>
+                    </div>
+                  </td>
+
+                  <td class="float-right">
+                    <div class="ph">
+                      <div class="inline checkbox c-checkbox">
+                        <label (click)="$event.stopPropagation()">
+                          <input type="checkbox" (change)="updateTodo(todo)" [(ngModel)]="todo.complete" />
+                          <span class="fa fa-check"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+
+
+
+      <tab heading="Today ({{ todayCount }})" [active]="true">
+        <div class="list-group" *ngIf="todayCount == 0">
+          <div class="list-group-item">
+            <table class="wd-wide">
+              <tbody>
+              <tr>
+                <td class="wd-md">
+                  <div class="ph text-center padding-top padding-bottom">
+                    <strong class="media-box-heading text-info text-uppercase">No Todos Today</strong><br>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div *ngFor="let todo of todos | async">
+          <div class="list-group" *ngIf="(todo.dueDate.getDate()+'+'+todo.dueDate.getMonth() ) == (today.getDate()+'+'+today.getMonth())">
+            <div class="list-group-item">
+              <table class="wd-wide">
+                <tbody>
+                <tr>
+                  <td class="wd-sm">
+                    <div class="ph">
+                      <mat-chip-list>
+                        <mat-chip *ngIf="todo.complete" color="primary" selected="true">Completed</mat-chip>
+                        <mat-chip *ngIf="!todo.complete" color="accent" selected="true">Not Complete</mat-chip>
+                      </mat-chip-list>
+                    </div>
+                  </td>
+                  <td class="wd-md">
+                    <div class="ph">
+                      <strong class="media-box-heading text-info text-uppercase">{{ fb.activityTypesIndex[todo.activityTypeKey] }}</strong><br>
+                      <small class="text-muted">{{ todo.title }}</small>
+                      <h4 class="media-box-heading">{{ fb.userIndex[todo.assignToUserKey]?.name }}</h4>
+                    </div>
+                  </td>
+                  <td class="wd-md hidden-xs hidden-sm">
+                    <div class="ph">
+                      <span *ngIf="todo?.associateToType == 'people'">
+                        <em class="icon-people"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/people/'+todo.associateToKey]">{{ fb.peopleNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'locations'">
+                        <em class="icon-layers"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/locations/'+todo.associateToKey ]">{{ fb.locationsNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'companies'">
+                        <em class="icon-briefcase"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/companies/'+todo.associateToKey]">{{ fb.companiesNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'parent_companies'">
+                        <em class="icon-diamond"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/parent-companies/'+todo.associateToKey ]">{{ fb.parentCompaniesNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="wd-md hidden-xs hidden-sm">
+                    <div class="ph">
+                      <p class="m0">DUE DATE</p>
+                      <p class="text-muted"><b>{{ todo?.dueDate | date:'MMM d, y h:mm a' }}</b></p>
+                    </div>
+                  </td>
+
+                  <td class="float-right">
+                    <div class="ph">
+                      <div class="inline checkbox c-checkbox">
+                        <label (click)="$event.stopPropagation()">
+                          <input type="checkbox" (change)="updateTodo(todo)" [(ngModel)]="todo.complete" />
+                          <span class="fa fa-check"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
+      </tab>
+
+
+
+      <tab heading="This Week ({{ thisWeekCount }})">
+        <div class="list-group" *ngIf="thisWeekCount == 0">
+          <div class="list-group-item">
+            <table class="wd-wide">
+              <tbody>
+              <tr>
+                <td class="wd-md">
+                  <div class="ph text-center padding-top padding-bottom">
+                    <strong class="media-box-heading text-info text-uppercase">No Todos this Week</strong><br>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div *ngFor="let todo of todos | async">
+          <div class="list-group" *ngIf="(todo.dueDate?.getTime()) > (today.getTime()) && (todo.dueDate?.getTime()) <= (nextWeek.getTime())">
+            <div class="list-group-item">
+              <table class="wd-wide">
+                <tbody>
+                <tr>
+                  <td class="wd-sm">
+                    <div class="ph">
+                      <mat-chip-list>
+                        <mat-chip *ngIf="todo.complete" color="primary" selected="true">Completed</mat-chip>
+                        <mat-chip *ngIf="!todo.complete" color="accent" selected="true">Not Complete</mat-chip>
+                      </mat-chip-list>
+                    </div>
+                  </td>
+                  <td class="wd-md">
+                    <div class="ph">
+                      <strong class="media-box-heading text-info text-uppercase">{{ fb.activityTypesIndex[todo.activityTypeKey] }}</strong><br>
+                      <small class="text-muted">{{ todo.title }}</small>
+                      <h4 class="media-box-heading">{{ fb.userIndex[todo.assignToUserKey]?.name }}</h4>
+                    </div>
+                  </td>
+                  <td class="wd-md hidden-xs hidden-sm">
+                    <div class="ph">
+                      <span *ngIf="todo?.associateToType == 'people'">
+                        <em class="icon-people"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/people/'+todo.associateToKey]">{{ fb.peopleNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'locations'">
+                        <em class="icon-layers"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/locations/'+todo.associateToKey ]">{{ fb.locationsNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'companies'">
+                        <em class="icon-briefcase"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/companies/'+todo.associateToKey]">{{ fb.companiesNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                      <span *ngIf="todo?.associateToType == 'parent_companies'">
+                        <em class="icon-diamond"></em>&nbsp;&nbsp;&nbsp;<a class="item-display" [routerLink]="['/parent-companies/'+todo.associateToKey ]">{{ fb.parentCompaniesNameIndex[todo?.associateToKey]?.name }}</a>
+                      </span>
+                    </div>
+                  </td>
+                  <td class="wd-md hidden-xs hidden-sm">
+                    <div class="ph">
+                      <p class="m0">DUE DATE</p>
+                      <p class="text-muted"><b>{{ todo.dueDate | date:'MMM d, y h:mm a' }}</b></p>
+                    </div>
+                  </td>
+
+                  <td class="float-right">
+                    <div class="ph">
+                      <div class="inline checkbox c-checkbox">
+                        <label (click)="$event.stopPropagation()">
+                          <input type="checkbox" (change)="updateTodo(todo)" [(ngModel)]="todo.complete" />
+                          <span class="fa fa-check"></span>
+                        </label>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </tab>
+    </tabset>
+  </div>
+</div>

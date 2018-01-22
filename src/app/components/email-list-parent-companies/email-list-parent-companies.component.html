@@ -1,0 +1,108 @@
+<ng-template tabHeading>
+  <em class="icon-people"></em>&nbsp;&nbsp;Parent Companies ({{totalRecords}})
+</ng-template>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input #gb type="text" pInputText placeholder="Search" style="width: 250px !important;padding: .2em !important;">
+        </div>
+        <p-dataTable [value]="parentCompanies"
+                     [sortField]="'dateAdded'"
+                     [sortOrder]="-1"
+                     [rows]="25"
+                     [responsive]="true"
+                     [paginator]="true"
+                     expandableRows="true"
+                     [globalFilter]="gb"
+                     #dt>
+          <p-column field="id" header="" styleClass="col-button">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <button *ngIf="car['email'] != '' && (fb?.emailList?.parentCompanyIndex[car['id']] == undefined || fb?.emailList?.parentCompanyIndex[car['id']] == false) && car['isDoNotEmail'] != true"
+                      class="mb-sm btn btn-info full-width" type="button"
+                      (click)="addToEmailList(car[col.field])"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></button>
+              <button *ngIf="car['email'] != '' && (fb?.emailList?.parentCompanyIndex[car['id']] != undefined && fb?.emailList?.parentCompanyIndex[car['id']] == true)"
+                      class="mb-sm btn btn-primary full-width" type="button"
+                      (click)="removeFromEmailList(car[col.field])"><i class="fa fa-minus fa-2x" aria-hidden="true"></i></button>
+              <div *ngIf="car['isDoNotEmail'] == true">
+                <mat-chip-list>
+                  <mat-chip color="warn" selected="true">DNC</mat-chip>
+                </mat-chip-list>
+              </div>
+            </ng-template>
+          </p-column>
+          <p-column field="name" header="Name" [sortable]="true" filterPlaceholder="Search" [filter]="true"></p-column>
+          <p-column field="website" header="Website" styleClass="col-icon" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <a class="text-primary" *ngIf="car[col.field]" href="{{ car[col.field] }}" target="_blank"><em class="icon-screen-desktop"></em></a>
+            </ng-template>
+          </p-column>
+          <p-column field="email" header="Email" styleClass="col-email" [sortable]="true" filterPlaceholder="Search" [filter]="true"></p-column>
+          <p-column field="lastEmailSent" header="Last Email Sent" styleClass="col-source" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              {{ car[col.field] | date }}
+            </ng-template>
+          </p-column>
+          <p-column field="emailCampaigns" header="Campaigns" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngFor="let item of car[col.field]">
+                {{ fb.emailCampaignIndex[item]?.name }}
+              </div>
+            </ng-template>
+          </p-column>
+          <p-column field="accountExecutiveKey" header="A.E." [filter]="true" filterMatchMode="in">
+            <ng-template pTemplate="filter" let-col>
+              <p-multiSelect [options]="fb.userArray" defaultLabel="All Users" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+            </ng-template>
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              {{fb.userIndex[car[col.field]]?.name}}
+            </ng-template>
+          </p-column>
+          <p-column field="source" header="Source" [filter]="true" filterMatchMode="in">
+            <ng-template pTemplate="filter" let-col>
+              <p-multiSelect [options]="fb.sources" defaultLabel="All Users" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+            </ng-template>
+            <ng-template let-col let-car="rowData" pTemplate="body" >
+              {{ fb.sourceIndex[car[col.field]] }}
+            </ng-template>
+          </p-column>
+          <p-column field="peopleKeys" header="People" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngFor="let key of car[col.field]">
+                <a (click)="editPerson(key)">{{ fb.peopleNameIndex[key]?.name }}</a>
+              </div>
+            </ng-template>
+          </p-column>
+          <p-column field="companyKeys" header="Companies" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngFor="let key of car[col.field]">
+                <a (click)="editCompany(key)">{{ fb.companiesNameIndex[key]?.name }}</a>
+              </div>
+            </ng-template>
+          </p-column>
+          <p-column field="locationKeys" header="Locations" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <div *ngFor="let key of car[col.field]">
+                <a (click)="editLocation(key)">{{ fb.locationsNameIndex[key]?.name }}</a>
+              </div>
+            </ng-template>
+          </p-column>
+          <p-column field="dateAdded" header="Created On" styleClass="col-date" [sortable]="true">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              {{ car[col.field] | date}}
+            </ng-template>
+          </p-column>
+          <p-column field="phone" header="Phone" [sortable]="true"></p-column>
+          <p-column field="id" header="" styleClass="col-button">
+            <ng-template let-col let-car="rowData" pTemplate="body">
+              <button class="mb-sm btn btn-default full-width" type="button" (click)="edit(car[col.field])">Edit</button>
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+.activity-header {
+  font-size: 21px;
+}
+p {
+  margin: 0px 0 0 0 !important;
+}
+.dropdown-wrapper {
+  display: flex;
+}
+.title {
+  font-size: 16px;
+  color: #607d8b;
+}
+.date {
+  display: block;
+  font-weight: 800;
+  font-size: 13px;
+}
+.popover-title {
+  text-transform: uppercase;
+}
+.activity {
+  margin-right: 10px;
+}
+.timeline, .timeline-alt {
+  list-style: none;
+  padding: 0 0 0px !important;
+}
+.timeline-alt > li {
+  margin-bottom: 5px !important;
+}
+.timeline-panel {
+  margin-left: 0px !important;
+}
+.recent-activity {
+
+}

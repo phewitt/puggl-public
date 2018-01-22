@@ -1,0 +1,13 @@
+<tabset [justified]="true">
+  <div *ngIf="fb.error" class="error" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    {{fb.error }}
+  </div>
+
+  <sidebar-form-parent-company *ngIf="fb.sidebarForm == 'parent-company'"></sidebar-form-parent-company>
+  <sidebar-form-company *ngIf="fb.sidebarForm == 'company'"></sidebar-form-company>
+  <sidebar-form-location *ngIf="fb.sidebarForm == 'location'"></sidebar-form-location>
+  <sidebar-form-person *ngIf="fb.sidebarForm == 'person'"></sidebar-form-person>
+  <sidebar-form-deal *ngIf="fb.sidebarForm == 'deal'"></sidebar-form-deal>
+</tabset>

@@ -1,0 +1,88 @@
+<div *ngIf="deals != undefined; else loading">
+  <p-dataTable *ngIf="deals?.length > 0"
+               [value]="deals"
+               expandableRows="true"
+               [sortField]="'expectedClose'"
+               [rows]="10"
+               [responsive]="true"
+               [paginator]="true"
+               #dt>
+    <p-column field="probability" header="Status" styleClass="col-button" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <mat-chip-list>
+          <mat-chip *ngIf="car['status'] == 'green'" [ngStyle]="{'background': '#4CAF50'}" selected="true">{{ car[col.field] }}%</mat-chip>
+          <mat-chip *ngIf="car['status'] == 'yellow'" [ngStyle]="{'background': '#FFEB3B'}" selected="true">{{ car[col.field] }}%</mat-chip>
+          <mat-chip *ngIf="car['status'] == 'red'" [ngStyle]="{'background': '#EF5350'}" selected="true">{{ car[col.field] }}%</mat-chip>
+        </mat-chip-list>
+      </ng-template>
+    </p-column>
+    <p-column field="stageKey" header="Stage" [filter]="true" filterMatchMode="in">
+      <ng-template pTemplate="filter" let-col>
+        <p-multiSelect [options]="fb.dealStagesArray" defaultLabel="All Stages" (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)" styleClass="ui-column-filter"></p-multiSelect>
+      </ng-template>
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <span class="text-info"><b>{{ fb.dealStagesIndex[car[col.field]] }}</b></span>
+      </ng-template>
+    </p-column>
+    <p-column field="postedToKey" header="Sent To" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <div *ngIf="car['postedToType'] == 'people'">
+          <em class="icon-people"></em>
+          <a [routerLink]="['/people/'+car['postedToKey']]">{{ fb.peopleNameIndex[car[col.field]]?.name }}</a>
+        </div>
+        <div *ngIf="car['postedToType'] == 'companies'">
+          <em class="icon-briefcase"></em>
+          <a [routerLink]="['/companies/'+car['postedToKey']]">{{ fb.companiesNameIndex[car[col.field]]?.name }}</a>
+        </div>
+        <div *ngIf="car['postedToType'] == 'locations'">
+          <em class="icon-layers"></em>
+          <a [routerLink]="['/locations/'+car['postedToKey']]">{{ fb.locationsNameIndex[car[col.field]]?.name }}</a>
+        </div>
+        <div *ngIf="car['postedToType'] == 'parent_companies'">
+          <em class="icon-diamond"></em>
+          <a [routerLink]="['/parent-companies/'+car['postedToKey']]">{{ fb.peopleNameIndex[car[col.field]]?.name }}</a>
+        </div>
+      </ng-template>
+    </p-column>
+    <p-column field="name" header="Name" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <div>{{ car[col.field] }}</div>
+      </ng-template>
+    </p-column>
+    <p-column field="onboardingAmount" header="Onboarding" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <div>{{ car[col.field] | currency:'USD':'symbol':'.2-2'}}</div>
+      </ng-template>
+    </p-column>
+    <p-column field="monthlyAmount" header="Monthly" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <div>{{ car[col.field] | currency:'USD':'symbol':'.2-2' }}</div>
+      </ng-template>
+    </p-column>
+    <p-column field="ownerKey" header="Owner" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <div>{{ fb.userIndex[car[col.field]]?.name }}</div>
+      </ng-template>
+    </p-column>
+    <p-column field="isOnboarded" header="Development Status" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <div *ngIf="fb.dealStagesIndex[car['stageKey']] == 'Won'">
+          <mat-checkbox name="isOnboarded" *ngIf="car[col.field]" [(ngModel)]="car[col.field]" [disabled]="true">Onboarding</mat-checkbox>
+          <mat-checkbox name="isInitialDevelopment" *ngIf="car['isInitialDevelopment']" [(ngModel)]="car['isInitialDevelopment']" [disabled]="true">Initial Development</mat-checkbox>
+          <mat-checkbox name="isReview" *ngIf="car['isReview']" [(ngModel)]="car['isReview']" [disabled]="true">Review</mat-checkbox>
+          <mat-checkbox name="isRevise" *ngIf="car['isRevise']" [(ngModel)]="car['isRevise']" [disabled]="true">Revise</mat-checkbox>
+          <mat-checkbox name="isLaunch" *ngIf="car['isLaunch']" [(ngModel)]="car['isLaunch']" [disabled]="true">Launch</mat-checkbox>
+        </div>
+      </ng-template>
+    </p-column>
+    <p-column field="expectedClose" header="Expected Close" [sortable]="true">
+      <ng-template let-col let-car="rowData" pTemplate="body">
+        <div>{{ car[col.field] | date }}</div>
+      </ng-template>
+    </p-column>
+  </p-dataTable>
+</div>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

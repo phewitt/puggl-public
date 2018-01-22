@@ -1,0 +1,35 @@
+<div class="p">
+  <h4 class="text-muted text-thin">Address</h4>
+  <p>Street</p>
+  <input class="form-control" [(ngModel)]="fb.sidebarAddress.street" type="text" pInputText name="street">
+  <p>Street 2</p>
+  <input class="form-control" [(ngModel)]="fb.sidebarAddress.street2" type="text" pInputText name="street2">
+
+  <div class="side-by-side">
+    <div class="half-width">
+      <p>City</p>
+      <p-autoComplete [(ngModel)]="fb.sidebarAddress.city"
+                      [suggestions]="filteredCities"
+                      name="tags"
+                      (completeMethod)="filter($event, 'cities')"
+                      type="tags"
+                      [inputStyleClass]="'full-width form-control'"
+                      [minLength]="0"
+      ></p-autoComplete>
+    </div>
+    <div class="half-width">
+      <p>State</p>
+      <p-autoComplete [(ngModel)]="fb.sidebarAddress.state"
+                      [suggestions]="filteredStates"
+                      name="tags"
+                      (completeMethod)="filter($event, 'states')"
+                      type="tags"
+                      [inputStyleClass]="'full-width form-control'"
+                      [minLength]="0"
+      ></p-autoComplete>
+    </div>
+  </div>
+
+  <p>Zip</p>
+  <input class="form-control half-width" [(ngModel)]="fb.sidebarAddress.zip" type="text" pInputText name="zip">
+</div>

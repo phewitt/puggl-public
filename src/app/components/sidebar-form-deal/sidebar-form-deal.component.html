@@ -1,0 +1,114 @@
+<button class="sm-margin-left mb-sm btn btn-default float-left" type="button" (click)="close()">Cancel</button>
+
+<h3 class="text-center text-thin"><em class="icon-wallet icon"></em>&nbsp;&nbsp;Deal</h3>
+
+<form>
+  <div class="p">
+    <h4 class="text-muted text-thin">Info</h4>
+    <p>Deal Name *</p>
+    <input class="form-control" type="text" [(ngModel)]="fb.sidebarData.name" pInputText name="name" required>
+
+    <div class="side-by-side">
+      <div class="half-width">
+        <p>Stage</p>
+        <select class="form-control" name="stage" [(ngModel)]="fb.sidebarData.stageKey">
+          <option value=""></option>
+          <option *ngFor="let stage of fb?.dealStagesArray" value="{{stage?.id}}">{{stage?.name}}</option>
+        </select>
+      </div>
+      <div class="half-width">
+        <p>Status</p>
+        <select class="form-control" name="software" [(ngModel)]="fb.sidebarData.status">
+          <option value=""></option>
+          <option *ngFor="let status of statusArray" value="{{status.value}}">{{status.name}}</option>
+        </select>
+      </div>
+    </div>
+
+    <p>Expected Close</p>
+    <input class="form-control" bsDatepicker #dp="bsDatepicker" [bsConfig]="bsConfig" name="dueDate" [(ngModel)]="fb.sidebarData.expectedClose" />
+
+    <p>Probability</p>
+    <mat-slider
+      class="full-width"
+      [max]="100"
+      [min]="0"
+      [step]="1"
+      [thumb-label]="true"
+      name="probability"
+      [(ngModel)]="fb.sidebarData.probability"
+      >
+    </mat-slider>
+  </div>
+
+  <div class="p">
+    <h4 class="text-muted text-thin">Cost</h4>
+    <div class="side-by-side">
+      <div class="half-width">
+        <p>Onboarding</p>
+        <div class="input-group">
+          <input class="form-control" type="text" name="onboardingAmount" [(ngModel)]="fb.sidebarData.onboardingAmount">
+          <span class="input-group-addon">.00</span>
+        </div>
+      </div>
+      <div class="half-width">
+        <p>Monthly</p>
+        <div class="input-group">
+          <input class="form-control" type="text" name="monthlyAmount" [(ngModel)]="fb.sidebarData.monthlyAmount">
+          <span class="input-group-addon">.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p">
+    <h4 class="text-muted text-thin">Development</h4>
+    <mat-checkbox name="isOnboarded" [(ngModel)]="fb.sidebarData.isOnboarded">Onboarding</mat-checkbox>&nbsp;&nbsp;
+    <mat-checkbox name="isInitialDevelopment" [(ngModel)]="fb.sidebarData.isInitialDevelopment">Initial Development</mat-checkbox>&nbsp;&nbsp;<br><br>
+    <mat-checkbox name="isReview" [(ngModel)]="fb.sidebarData.isReview">Review</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+    <mat-checkbox name="isRevise" [(ngModel)]="fb.sidebarData.isRevise">Revise</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
+    <mat-checkbox name="isLaunch" [(ngModel)]="fb.sidebarData.isLaunch">Launch</mat-checkbox>
+  </div>
+
+  <div class="p">
+      <button class="mb-sm btn btn-default float-right" type="button" (click)="addAddOn()"><em class="fa fa-plus"></em></button>
+    <h4 class="text-muted text-thin">Add Ons</h4>
+    <div class="side-by-side" *ngFor="let addOn of fb.sidebarData?.addOns; let i = index;">
+        <div class="one-third-width">
+        <p>Name</p>
+        <div class="input-group">
+          <input class="form-control" type="text" name="addOn.name-{{i}}" [(ngModel)]="addOn.name">
+        </div>
+      </div>
+      <div class="one-third-width">
+        <p>Price</p>
+        <div class="input-group">
+          <input class="form-control" type="text" name="addOn.price-{{i}}" [(ngModel)]="addOn.price">
+          <span class="input-group-addon">.00</span>
+        </div>
+      </div>
+      <div class="one-fifth">
+        <p>&nbsp;</p>
+        <button class="mb-sm btn btn-warning float-right" type="button" (click)="removeAddOn(i)"><em class="fa fa-minus"></em></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="p">
+    <h4 class="text-muted text-thin">Extra</h4>
+    <p>Deal Owner</p>
+    <select class="form-control" name="source" [(ngModel)]="fb.sidebarData.ownerKey">
+      <option value=""></option>
+      <option *ngFor="let source of fb.userArray" value="{{source.id}}">{{source.name}}</option>
+    </select>
+
+    <p>Summary</p>
+    <textarea class="form-control" type="text" [(ngModel)]="fb.sidebarData.summary" pInputTextarea name="summary"></textarea>
+
+  </div>
+
+  <div class="p">
+    <button class="mb-sm btn btn-default float-left" type="button" (click)="close()">Cancel</button>
+    <button class="mb-sm btn btn-primary float-right" type="submit" (click)="submit()">Submit</button>
+  </div>
+</form>
